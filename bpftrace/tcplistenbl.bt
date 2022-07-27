@@ -1,0 +1,26 @@
+/*
+ * tcplistenbl - Trace TCP listen backlog when ACK packets arrive.
+ *
+ * Positional parameters:
+ *  $1: Sampling rate.
+ *
+ * Copyright (C) 2020 Georgia Tech Center for Experimental Research in Computer
+ * Systems
+ *
+ * Author: Rodrigo Alves Lima
+ */
+
+#ifndef BPFTRACE_HAVE_BTF
+#include <net/sock.h>
+#endif
+
+BEGIN {
+  printf("%-26s %-8s %-20s %-13s\n", "TIME", "PID", "COMM", "BACKLOG");
+}
+
+/* ACK packet arrived. */
+kprobe:tcp_v4_syn_recv_sock {
+  if (nsecs % ((uint64) $1) == 0) {
+    printf("%-26s %-8d %-20s %6d/%-6d\n", strftime("%Y-%m-%d-%H:%M:%S.%f", nsecs), pid, comm, ((struct sock *) arg0)->sk_ack_backlog, ((struct sock *) arg0)->sk_max_ack_backlog);
+  }
+}

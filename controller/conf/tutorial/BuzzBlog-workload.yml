@@ -1,0 +1,84 @@
+# Copyright (C) 2020 Georgia Tech Center for Experimental Research in Computer
+# Systems
+
+sessions: 10000
+duration:
+  total: 720
+  ramp_up: 180
+  ramp_down: 60
+think_time: 10
+think_time_distribution: poisson
+request_graph:
+  main:
+    create_account: 1.00
+  create_account:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  update_account:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  create_post:
+    retrieve_recent_posts: 1.00
+  delete_post:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  follow_account:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  delete_follow:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  like_post:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  delete_like:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  retrieve_recent_posts:
+    update_account: 0.03
+    create_post: 0.08
+    delete_post: 0.03
+    follow_account: 0.10
+    delete_follow: 0.04
+    like_post: 0.10
+    delete_like: 0.04
+    retrieve_post: 0.20
+    retrieve_account: 0.18
+    list_trending_hashtags: 0.20
+  retrieve_post:
+    retrieve_post_likes: 1.00
+  retrieve_post_likes:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  retrieve_account:
+    retrieve_account_posts: 0.10
+    retrieve_account_followers: 0.30
+    retrieve_account_followees: 0.30
+    retrieve_account_likes: 0.30
+  retrieve_account_posts:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  retrieve_account_followers:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  retrieve_account_followees:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  retrieve_account_likes:
+    create_post: 0.15
+    retrieve_recent_posts: 0.80
+    list_trending_hashtags: 0.05
+  list_trending_hashtags:
+    create_post: 0.15
+    retrieve_recent_posts: 0.85
