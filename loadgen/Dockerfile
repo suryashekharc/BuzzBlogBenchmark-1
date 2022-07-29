@@ -12,11 +12,11 @@ ENV port null
 ENV seed null
 ENV n_workers null
 
-# Install ATLoad v1.0.
+# Install ATLoad v1.1.
 RUN cd lib \
-  && wget https://github.com/rodrigoalveslima/ATLoad/archive/v1.0.tar.gz \
-  && tar -xzf v1.0.tar.gz \
-  && rm v1.0.tar.gz
+  && wget https://github.com/rodrigoalveslima/ATLoad/archive/v1.1.tar.gz \
+  && tar -xzf v1.1.tar.gz \
+  && rm v1.1.tar.gz
 
 # Build directory tree and copy files.
 RUN mkdir -p src/loadgen
@@ -25,7 +25,7 @@ COPY requirements.txt src/loadgen
 
 # Install Python dependencies.
 RUN pip install --no-cache-dir -r src/loadgen/requirements.txt
-RUN pip install --no-cache-dir -r lib/ATLoad-1.0/requirements.txt
+RUN pip install --no-cache-dir -r lib/ATLoad-1.1/requirements.txt
 
 # Start the workload generator.
-CMD ["/bin/bash", "-c", "PYTHONPATH=/usr/local/lib/ATLoad-1.0/src python3 src/loadgen/loadgen.py --workload_conf etc/loadgen/workload.yml --log /tmp/loadgen.log --hostname $hostname --port $port --seed $seed --n_workers ${n_workers}"]
+CMD ["/bin/bash", "-c", "PYTHONPATH=/usr/local/lib/ATLoad-1.1/src python3 src/loadgen/loadgen.py --workload_conf etc/loadgen/workload.yml --log /tmp/loadgen.log --hostname $hostname --port $port --seed $seed --n_workers ${n_workers}"]
