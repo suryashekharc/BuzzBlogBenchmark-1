@@ -159,7 +159,7 @@ node-2:
           - "hostname=node-6"
           - "port=1080"
           - "n_workers=12"
-          - "seed=1910"
+          - "seed=42"
   monitors:
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -217,7 +217,7 @@ node-3:
           - "hostname=node-7"
           - "port=1080"
           - "n_workers=12"
-          - "seed=1910"
+          - "seed=42"
   monitors:
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
