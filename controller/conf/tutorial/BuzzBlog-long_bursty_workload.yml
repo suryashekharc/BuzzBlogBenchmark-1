@@ -9,8 +9,8 @@ duration:
 think_time: 10
 think_time_distribution: poisson
 burstiness:
-  think_time: 1
-  window_in_s: 0.5
+  intensity: 2
+  window: 0.5
   turn_on_prob: 0.05
   turn_off_prob: 0.5
 request_graph:
