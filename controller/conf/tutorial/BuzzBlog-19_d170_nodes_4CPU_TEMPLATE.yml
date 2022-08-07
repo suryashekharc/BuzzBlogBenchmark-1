@@ -246,7 +246,7 @@ node-4:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 4 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {4..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
     # Enable performance mode.
   teardown:
@@ -322,7 +322,7 @@ node-5:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 4 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {4..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -397,7 +397,7 @@ node-6:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 4 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {4..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -472,7 +472,7 @@ node-7:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 4 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {4..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -547,7 +547,7 @@ node-8:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 4 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {4..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -626,7 +626,7 @@ node-9:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 2 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {2..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -701,7 +701,7 @@ node-10:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 2 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {2..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -777,7 +777,7 @@ node-11:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 3 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {3..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -853,7 +853,7 @@ node-12:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 4 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {4..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -932,7 +932,7 @@ node-13:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 2 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {2..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -1007,7 +1007,7 @@ node-14:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 3 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {3..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -1085,7 +1085,7 @@ node-15:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 3 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {3..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -1160,7 +1160,7 @@ node-16:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 1 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {1..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -1237,7 +1237,7 @@ node-17:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 1 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {1..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
@@ -1316,7 +1316,7 @@ node-18:
     # Disable Intel Turbo Boost.
     - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
     # Disable VCPUs 1 to 12.
-    - "for all_cpu in {0..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for all_cpu in {1..12}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
     - "for cpu_no in {1..12}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
   teardown:
     # Enable Intel Turbo Boost.
