@@ -2,6 +2,7 @@
 # Systems
 
 sessions: 10000
+loop: open
 duration:
   total: 720
   ramp_up: 180
