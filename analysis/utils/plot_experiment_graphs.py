@@ -167,20 +167,27 @@ class RequestLogAnalysis(LogAnalysis):
     return fig
 
   @LogAnalysis.save_fig
-  def plot_request_throughput(self):
+  def plot_request_throughput(self, interval=None):
+    if not interval:
+      window = 1000
+      min_time = self._requests.index.min()
+      max_time = self._requests.index.max()
+    else:
+      window = 10
+      (min_time, max_time) = interval
     # Data frame
-    df = self._requests.groupby(["window_1000", "status"])["window_1000"].count().unstack().fillna(0).\
-        reindex(range(int(self._requests["window_1000"].values.min()),
-            int(self._requests["window_1000"].values.max()) + 1, 1000), fill_value=0)
+    df = self._requests[(self._requests.index >= min_time) & (self._requests.index <= max_time)].\
+        groupby(["window_%s" % window, "status"])["window_%s" % window].count().unstack().fillna(0)
     if df.empty:
       return None
+    df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
     # Plot
     fig = plt.figure(figsize=(24, 12))
     ax = fig.gca()
     ax.grid(alpha=0.75)
+    ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
     ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
-    ax.set_xlim((0, self._total_duration * 1000))
     df.plot(ax=ax, kind="line", title="Request Throughput", xlabel="Time (millisec)", ylabel="Throughput (Requests/Sec)",
         color={"failed": "red", "successful": "blue"}, legend=True, grid=True,
         xticks=range(int(df.index.min()), int(df.index.max()) + 1, 60000))
