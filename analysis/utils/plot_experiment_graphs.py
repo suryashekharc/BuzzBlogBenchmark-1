@@ -188,7 +188,8 @@ class RequestLogAnalysis(LogAnalysis):
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
     ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
-    df.plot(ax=ax, kind="line", title="Request Throughput", xlabel="Time (millisec)", ylabel="Throughput (Requests/Sec)",
+    df.plot(ax=ax, kind="line", title="Request Throughput", xlabel="Time (millisec)",
+        ylabel="Throughput (Requests/Sec)" if not interval else "Throughput (Requests/10ms)",
         color={"failed": "red", "successful": "blue"}, legend=True, grid=True,
         xticks=range(int(df.index.min()), int(df.index.max()) + 1, 60000))
     return fig
