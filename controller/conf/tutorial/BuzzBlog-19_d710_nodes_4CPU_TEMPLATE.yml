@@ -42,7 +42,7 @@ node-0:
         env:
           - "hostname=node-4"
           - "port=1080"
-          - "n_workers=12"
+          - "n_workers=8"
           - "seed=42"
   monitors:
     tcpretrans-bpftrace:
@@ -100,7 +100,7 @@ node-1:
         env:
           - "hostname=node-5"
           - "port=1080"
-          - "n_workers=12"
+          - "n_workers=8"
           - "seed=42"
   monitors:
     tcpretrans-bpftrace:
@@ -158,7 +158,7 @@ node-2:
         env:
           - "hostname=node-6"
           - "port=1080"
-          - "n_workers=12"
+          - "n_workers=8"
           - "seed=42"
   monitors:
     tcpretrans-bpftrace:
@@ -216,7 +216,7 @@ node-3:
         env:
           - "hostname=node-7"
           - "port=1080"
-          - "n_workers=12"
+          - "n_workers=8"
           - "seed=42"
   monitors:
     tcpretrans-bpftrace:
