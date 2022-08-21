@@ -31,7 +31,7 @@ node-0:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     loadgen:
-      image: "rodrigoalveslima/buzzblog:loadgen_v1.3"
+      image: "rodrigoalveslima/buzzblog:loadgen_v1.4"
       start_order: 4
       options:
         name: "loadgen"
@@ -89,7 +89,7 @@ node-1:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     loadgen:
-      image: "rodrigoalveslima/buzzblog:loadgen_v1.3"
+      image: "rodrigoalveslima/buzzblog:loadgen_v1.4"
       start_order: 4
       options:
         name: "loadgen"
@@ -147,7 +147,7 @@ node-2:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     loadgen:
-      image: "rodrigoalveslima/buzzblog:loadgen_v1.3"
+      image: "rodrigoalveslima/buzzblog:loadgen_v1.4"
       start_order: 4
       options:
         name: "loadgen"
@@ -205,7 +205,7 @@ node-3:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     loadgen:
-      image: "rodrigoalveslima/buzzblog:loadgen_v1.3"
+      image: "rodrigoalveslima/buzzblog:loadgen_v1.4"
       start_order: 4
       options:
         name: "loadgen"
@@ -268,7 +268,7 @@ node-4:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     apigateway1:
-      image: "rodrigoalveslima/buzzblog:apigateway_v1.0"
+      image: "rodrigoalveslima/buzzblog:apigateway_v1.4"
       start_order: 3
       options:
         name: "apigateway1"
@@ -338,7 +338,7 @@ node-5:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     apigateway1:
-      image: "rodrigoalveslima/buzzblog:apigateway_v1.0"
+      image: "rodrigoalveslima/buzzblog:apigateway_v1.4"
       start_order: 3
       options:
         name: "apigateway1"
@@ -408,7 +408,7 @@ node-6:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     apigateway1:
-      image: "rodrigoalveslima/buzzblog:apigateway_v1.0"
+      image: "rodrigoalveslima/buzzblog:apigateway_v1.4"
       start_order: 3
       options:
         name: "apigateway1"
@@ -478,7 +478,7 @@ node-7:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     apigateway1:
-      image: "rodrigoalveslima/buzzblog:apigateway_v1.0"
+      image: "rodrigoalveslima/buzzblog:apigateway_v1.4"
       start_order: 3
       options:
         name: "apigateway1"
@@ -548,7 +548,7 @@ node-8:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     account_service:
-      image: "rodrigoalveslima/buzzblog:account_v1.0"
+      image: "rodrigoalveslima/buzzblog:account_v1.4"
       start_order: 2
       options:
         name: "account_service"
@@ -702,7 +702,7 @@ node-10:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     follow_service:
-      image: "rodrigoalveslima/buzzblog:follow_v1.0"
+      image: "rodrigoalveslima/buzzblog:follow_v1.4"
       start_order: 2
       options:
         name: "follow_service"
@@ -778,7 +778,7 @@ node-11:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     like_service:
-      image: "rodrigoalveslima/buzzblog:like_v1.0"
+      image: "rodrigoalveslima/buzzblog:like_v1.4"
       start_order: 2
       options:
         name: "like_service"
@@ -849,7 +849,7 @@ node-12:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     post_service:
-      image: "rodrigoalveslima/buzzblog:post_v1.0"
+      image: "rodrigoalveslima/buzzblog:post_v1.4"
       start_order: 2
       options:
         name: "post_service"
@@ -1003,7 +1003,7 @@ node-14:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     uniquepair_service:
-      image: "rodrigoalveslima/buzzblog:uniquepair_v1.0"
+      image: "rodrigoalveslima/buzzblog:uniquepair_v1.4"
       start_order: 2
       options:
         name: "uniquepair_service"
@@ -1156,7 +1156,7 @@ node-16:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     trending_service:
-      image: "rodrigoalveslima/buzzblog:trending_v1.0"
+      image: "rodrigoalveslima/buzzblog:trending_v1.4"
       start_order: 2
       options:
         name: "trending_service"
@@ -1312,7 +1312,7 @@ node-18:
     net.ipv4.tcp_wmem: "4096 131072 16777216"
   containers:
     wordfilter_service:
-      image: "rodrigoalveslima/buzzblog:wordfilter_v1.0"
+      image: "rodrigoalveslima/buzzblog:wordfilter_v1.4"
       start_order: 2
       options:
         name: "wordfilter_service"
