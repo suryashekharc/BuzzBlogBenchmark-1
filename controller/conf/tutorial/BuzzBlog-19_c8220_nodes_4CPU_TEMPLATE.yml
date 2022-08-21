@@ -1,0 +1,1378 @@
+# Copyright (C) 2020 Georgia Tech Center for Experimental Research in Computer
+# Systems
+
+node-0:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    loadgen:
+      image: "rodrigoalveslima/buzzblog:loadgen_v1.4"
+      start_order: 4
+      options:
+        name: "loadgen"
+        network: "host"
+        ulimit: "nofile=131072:131072"
+        volume:
+          - "/usr/local/etc/loadgen:/usr/local/etc/loadgen"
+        env:
+          - "hostname=node-4"
+          - "port=1080"
+          - "n_workers=20"
+          - "seed=42"
+  monitors:
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-1:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    loadgen:
+      image: "rodrigoalveslima/buzzblog:loadgen_v1.4"
+      start_order: 4
+      options:
+        name: "loadgen"
+        network: "host"
+        ulimit: "nofile=131072:131072"
+        volume:
+          - "/usr/local/etc/loadgen:/usr/local/etc/loadgen"
+        env:
+          - "hostname=node-5"
+          - "port=1080"
+          - "n_workers=20"
+          - "seed=42"
+  monitors:
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-2:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    loadgen:
+      image: "rodrigoalveslima/buzzblog:loadgen_v1.4"
+      start_order: 4
+      options:
+        name: "loadgen"
+        network: "host"
+        ulimit: "nofile=131072:131072"
+        volume:
+          - "/usr/local/etc/loadgen:/usr/local/etc/loadgen"
+        env:
+          - "hostname=node-6"
+          - "port=1080"
+          - "n_workers=20"
+          - "seed=42"
+  monitors:
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-3:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    loadgen:
+      image: "rodrigoalveslima/buzzblog:loadgen_v1.4"
+      start_order: 4
+      options:
+        name: "loadgen"
+        network: "host"
+        ulimit: "nofile=131072:131072"
+        volume:
+          - "/usr/local/etc/loadgen:/usr/local/etc/loadgen"
+        env:
+          - "hostname=node-7"
+          - "port=1080"
+          - "n_workers=20"
+          - "seed=42"
+  monitors:
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-4:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 4 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {4..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 4 to 39.
+    - "for cpu_no in {4..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    apigateway1:
+      image: "rodrigoalveslima/buzzblog:apigateway_v1.0"
+      start_order: 3
+      options:
+        name: "apigateway1"
+        network: "host"
+        ulimit: "nofile=131072:131072"
+        volume:
+          - "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "backlog={{GUNICORNACCEPTQUEUE}}"
+          - "workers={{GUNICORNWORKERS}}"
+          - "threads={{GUNICORNTHREADS}}"
+          - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
+          - "port=1080"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-5:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 4 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {4..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 4 to 39.
+    - "for cpu_no in {4..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    apigateway1:
+      image: "rodrigoalveslima/buzzblog:apigateway_v1.0"
+      start_order: 3
+      options:
+        name: "apigateway1"
+        network: "host"
+        ulimit: "nofile=131072:131072"
+        volume:
+          - "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "backlog={{GUNICORNACCEPTQUEUE}}"
+          - "workers={{GUNICORNWORKERS}}"
+          - "threads={{GUNICORNTHREADS}}"
+          - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
+          - "port=1080"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-6:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 4 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {4..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 4 to 39.
+    - "for cpu_no in {4..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    apigateway1:
+      image: "rodrigoalveslima/buzzblog:apigateway_v1.0"
+      start_order: 3
+      options:
+        name: "apigateway1"
+        network: "host"
+        ulimit: "nofile=131072:131072"
+        volume:
+          - "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "backlog={{GUNICORNACCEPTQUEUE}}"
+          - "workers={{GUNICORNWORKERS}}"
+          - "threads={{GUNICORNTHREADS}}"
+          - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
+          - "port=1080"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-7:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 4 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {4..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 4 to 39.
+    - "for cpu_no in {4..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    apigateway1:
+      image: "rodrigoalveslima/buzzblog:apigateway_v1.0"
+      start_order: 3
+      options:
+        name: "apigateway1"
+        network: "host"
+        ulimit: "nofile=131072:131072"
+        volume:
+          - "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "backlog={{GUNICORNACCEPTQUEUE}}"
+          - "workers={{GUNICORNWORKERS}}"
+          - "threads={{GUNICORNTHREADS}}"
+          - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
+          - "port=1080"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-8:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 4 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {4..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 4 to 39.
+    - "for cpu_no in {4..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    account_service:
+      image: "rodrigoalveslima/buzzblog:account_v1.0"
+      start_order: 2
+      options:
+        name: "account_service"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "1090:1090"
+        volume: "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "port=1090"
+          - "threads={{THRIFTTHREADS}}"
+          - "accept_backlog={{THRIFTACCEPTQUEUE}}"
+          - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
+          - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
+          - "postgres_connection_pool_size={{THRIFTPGCONNPOOLSIZE}}"
+          - "postgres_user=postgres"
+          - "postgres_password=postgres"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-9:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 2 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {2..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 2 to 39.
+    - "for cpu_no in {2..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    account_database:
+      image: "postgres:13.1 -c max_connections={{PGMAXCONNECTIONS}}"
+      start_order: 1
+      options:
+        name: "account_database"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "5432:5432"
+        volume: "/var/lib/postgresql/BuzzBlog/account/data:/var/lib/postgresql/data"
+        detach: ""
+        env:
+          - "POSTGRES_USER=postgres"
+          - "POSTGRES_PASSWORD=postgres"
+          - "POSTGRES_DB=account"
+          - "POSTGRES_HOST_AUTH_METHOD=trust"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-10:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 2 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {2..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 2 to 39.
+    - "for cpu_no in {2..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    follow_service:
+      image: "rodrigoalveslima/buzzblog:follow_v1.0"
+      start_order: 2
+      options:
+        name: "follow_service"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "1091:1091"
+        volume: "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "port=1091"
+          - "threads={{THRIFTTHREADS}}"
+          - "accept_backlog={{THRIFTACCEPTQUEUE}}"
+          - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
+          - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-11:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 3 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {3..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 3 to 39.
+    - "for cpu_no in {3..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    like_service:
+      image: "rodrigoalveslima/buzzblog:like_v1.0"
+      start_order: 2
+      options:
+        name: "like_service"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "1092:1092"
+        volume: "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "port=1092"
+          - "threads={{THRIFTTHREADS}}"
+          - "accept_backlog={{THRIFTACCEPTQUEUE}}"
+          - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
+          - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-12:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 4 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {4..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 4 to 39.
+    - "for cpu_no in {4..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    post_service:
+      image: "rodrigoalveslima/buzzblog:post_v1.0"
+      start_order: 2
+      options:
+        name: "post_service"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "1093:1093"
+        volume: "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "port=1093"
+          - "threads={{THRIFTTHREADS}}"
+          - "accept_backlog={{THRIFTACCEPTQUEUE}}"
+          - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
+          - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
+          - "postgres_connection_pool_size={{THRIFTPGCONNPOOLSIZE}}"
+          - "postgres_user=postgres"
+          - "postgres_password=postgres"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-13:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 2 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {2..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 2 to 39.
+    - "for cpu_no in {2..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    post_database:
+      image: "postgres:13.1 -c max_connections={{PGMAXCONNECTIONS}}"
+      start_order: 1
+      options:
+        name: "post_database"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "5432:5432"
+        volume: "/var/lib/postgresql/BuzzBlog/post/data:/var/lib/postgresql/data"
+        detach: ""
+        env:
+          - "POSTGRES_USER=postgres"
+          - "POSTGRES_PASSWORD=postgres"
+          - "POSTGRES_DB=post"
+          - "POSTGRES_HOST_AUTH_METHOD=trust"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-14:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 3 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {3..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 3 to 39.
+    - "for cpu_no in {3..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    uniquepair_service:
+      image: "rodrigoalveslima/buzzblog:uniquepair_v1.0"
+      start_order: 2
+      options:
+        name: "uniquepair_service"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "1094:1094"
+        volume: "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "port=1094"
+          - "threads={{THRIFTTHREADS}}"
+          - "accept_backlog={{THRIFTACCEPTQUEUE}}"
+          - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
+          - "postgres_connection_pool_size={{THRIFTPGCONNPOOLSIZE}}"
+          - "postgres_user=postgres"
+          - "postgres_password=postgres"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-15:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 3 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {3..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 3 to 39.
+    - "for cpu_no in {3..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    uniquepair_database:
+      image: "postgres:13.1 -c max_connections={{PGMAXCONNECTIONS}}"
+      start_order: 1
+      options:
+        name: "uniquepair_database"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "5432:5432"
+        volume: "/var/lib/postgresql/BuzzBlog/uniquepair/data:/var/lib/postgresql/data"
+        detach: ""
+        env:
+          - "POSTGRES_USER=postgres"
+          - "POSTGRES_PASSWORD=postgres"
+          - "POSTGRES_DB=uniquepair"
+          - "POSTGRES_HOST_AUTH_METHOD=trust"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-16:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192" 
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 1 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {1..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 1 to 39.
+    - "for cpu_no in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    trending_service:
+      image: "rodrigoalveslima/buzzblog:trending_v1.0"
+      start_order: 2
+      options:
+        name: "trending_service"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "1095:1095"
+        volume: "/etc/opt/BuzzBlog:/etc/opt/BuzzBlog"
+        detach: ""
+        env:
+          - "port=1095"
+          - "threads={{THRIFTTHREADS}}"
+          - "accept_backlog={{THRIFTACCEPTQUEUE}}"
+          - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
+          - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
+          - "redis_connection_pool_size={{THRIFTREDISCONNPOOLSIZE}}"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-17:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 1 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {1..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 1 to 39.
+    - "for cpu_no in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  templates:
+    redis.conf:
+      output: "/etc/redis/redis.conf"
+      params:
+        snapshot_interval: {{REDISSNAPSHOTINTERVAL}}
+        maxclients: {{REDISMAXCLIENTS}}
+        tcp_backlog: {{REDISACCEPTQUEUE}}
+  containers:
+    trending_redis:
+      image: "redis:6.2 redis-server /etc/redis/redis.conf"
+      start_order: 1
+      options:
+        name: "trending_redis"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "6379:6379"
+        volume:
+          - "/var/lib/redis/BuzzBlog/trending/data:/data"
+          - "/etc/redis:/etc/redis"
+        detach: ""
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+node-18:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  setup:
+    # Set TCP queue sizes.
+    - "sudo ethtool -G ens1f1 rx 8192"
+    - "sudo ethtool -G ens1f1 tx 8192"
+    - "sudo ifconfig ens1f1 txqueuelen 8192"
+    # Disable Intel Turbo Boost.
+    - "echo \"1\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Disable VCPUs 1 to 39.
+    - "for all_cpu in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${all_cpu}/online; done"
+    - "for cpu_no in {1..39}; do echo \"0\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  teardown:
+    # Enable Intel Turbo Boost.
+    - "echo \"0\" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo"
+    # Enable VCPUs 1 to 39.
+    - "for cpu_no in {1..39}; do echo \"1\" | sudo tee /sys/devices/system/cpu/cpu${cpu_no}/online; done"
+  kernel:
+    net.core.netdev_budget: "1000"
+    net.core.netdev_budget_usecs: "32000"
+    net.core.netdev_max_backlog: "500000"
+    net.core.somaxconn: "4096"
+    net.ipv4.tcp_no_metrics_save: "1"
+    net.ipv4.ip_local_port_range: "2048 65535"
+    net.ipv4.tcp_abort_on_overflow: "0"
+    net.ipv4.tcp_fin_timeout: "10"
+    net.ipv4.tcp_max_syn_backlog: "4096"
+    net.ipv4.tcp_mem: "767307 6138456 12276912"
+    net.ipv4.tcp_syn_retries: "3"
+    net.ipv4.tcp_synack_retries: "3"
+    net.ipv4.tcp_syncookies: "0"
+    net.ipv4.tcp_timestamps: "0"
+    net.ipv4.tcp_tw_reuse: "1"
+    net.ipv4.tcp_rmem: "4096 131072 16777216"
+    net.ipv4.tcp_wmem: "4096 131072 16777216"
+  containers:
+    wordfilter_service:
+      image: "rodrigoalveslima/buzzblog:wordfilter_v1.0"
+      start_order: 2
+      options:
+        name: "wordfilter_service"
+        network: "host"
+        memory: "{{GB}}"
+        ulimit: "nofile=131072:131072"
+        publish: "1096:1096"
+        detach: ""
+        env:
+          - "port=1096"
+          - "threads={{THRIFTTHREADS}}"
+          - "accept_backlog={{THRIFTACCEPTQUEUE}}"
+          - "n_invalid_words={{NINVALIDWORDS}}"
+  monitors:
+    tcplistenbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
+      dirpath: "/tmp/tcplistenbl-bpftrace"
+      log: "/tmp/tcplistenbl-bpftrace/log"
+      niceness: 19
+    tcpretrans-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
+      dirpath: "/tmp/tcpretrans-bpftrace"
+      log: "/tmp/tcpretrans-bpftrace/log"
+      niceness: 19
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "{{MONITORINGINTERVAL}}"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
