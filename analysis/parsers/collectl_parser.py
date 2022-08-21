@@ -42,7 +42,8 @@ class CollectlParser:
         for hw_no in df.hw_no.unique():
             if (hw_type == "cpu" and df[(df["hw_no"] == hw_no)]["total"].unique().size == 1) or \
                     (hw_type == "mem" and df[(df["hw_no"] == hw_no)]["used"].unique().size == 1) or \
-                    (hw_type == "dsk" and df[(df["hw_no"] == hw_no)]["reads"].unique().size == 1):
+                    (hw_type == "dsk" and df[(df["hw_no"] == hw_no)]["reads"].unique().size == 1 and
+                        df[(df["hw_no"] == hw_no)]["writes"].unique().size == 1):
                 df = df[(df["hw_no"] != hw_no)]
         return df
 
