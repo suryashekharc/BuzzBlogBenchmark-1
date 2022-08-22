@@ -872,6 +872,34 @@ class TCPListenBacklogLogAnalysis(LogAnalysis):
           xlabel="Time (millisec)", ylabel="Count (Requests)", color="black", grid=True)
     return fig
 
+  @LogAnalysis.save_fig
+  def plot_listen_backlog_length_comparison(self, interval=None):
+    if not interval:
+      window = 1000
+      min_time = self._bl.index.min()
+      max_time = self._bl.index.max()
+    else:
+      window = 10
+      (min_time, max_time) = interval
+    # Data frame
+    df = self._bl[(self._bl.index >= min_time) & (self._bl.index <= max_time)]
+    df["node_label"] = df.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
+    df = df.groupby(["window_%s" % window, "node_label"])["len"].max().unstack().fillna(0)
+    if df.empty:
+      return None
+    df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
+    # Plot
+    fig = plt.figure(figsize=(24, 12))
+    ax = fig.gca()
+    ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
+    ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
+    ax.grid(alpha=0.75)
+    ax.set_xlim((min_time * 1000, max_time * 1000))
+    ax.set_ylim((0, np.nanmax(df)))
+    df.plot(ax=ax, kind="line", title="TCP Listen Backlog Length", xlabel="Time (millisec)",
+        ylabel="Count (Requests)", grid=True)
+    return fig
+
   def calculate_stats(self):
     stats = {}
     for node_name in self._node_names:
