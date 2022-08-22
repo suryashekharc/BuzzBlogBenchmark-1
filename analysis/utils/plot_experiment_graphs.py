@@ -235,47 +235,64 @@ class CollectlCPULogAnalysis(LogAnalysis):
         for node_name in self._node_names}
 
   @LogAnalysis.save_fig
-  def plot_averaged_cpu_metric(self, cpu_metric="total"):
-    fig = plt.figure(figsize=(24, len(self._node_names) * 12))
-    for (i, node_name) in enumerate(sorted(self._node_names)):
-      # Data frame
-      df = self._cpu[(self._cpu["node_name"] == node_name) & (self._cpu["hw_no"].isin(self._cpu_cores[node_name]))].\
-          groupby(["window_1000", "hw_no"])[cpu_metric].mean().unstack()
-      if df.empty:
-        continue
-      # Plot
-      ax = fig.add_subplot(len(self._node_names), 1, i + 1)
-      ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
-      ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
-      ax.set_xlim((0, df.index.max()))
-      ax.set_ylim((0, 100))
-      ax.grid(alpha=0.75)
-      df.plot(ax=ax, kind="line", title="%s: %s - CPU Utilization" % (node_name, self._node_labels[node_name]),
-          xlabel="Time (millisec)", ylabel="%s (%%)" % cpu_metric, grid=True, legend=False, yticks=range(0, 101, 10))
-    return fig
-
-  @LogAnalysis.save_fig
   def plot_cpu_metric(self, cpu_metric="total", interval=None):
     if not interval:
-      return None
+      window = 1000
+      min_time = self._cpu.index.min()
+      max_time = self._cpu.index.max()
     else:
+      window = None
       (min_time, max_time) = interval
     fig = plt.figure(figsize=(24, len(self._node_names) * 12))
     for (i, node_name) in enumerate(sorted(self._node_names)):
       # Data frame
       df = self._cpu[(self._cpu["node_name"] == node_name) & (self._cpu["hw_no"].isin(self._cpu_cores[node_name])) &
-          (self._cpu.index >= min_time) & (self._cpu.index <= max_time)].groupby(["timestamp"])[cpu_metric].mean()
+          (self._cpu.index >= min_time) & (self._cpu.index <= max_time)].\
+          groupby(["timestamp" if not window else ("window_%s" % window), "hw_no"])[cpu_metric].mean().unstack()
       if df.empty:
         continue
       # Plot
       ax = fig.add_subplot(len(self._node_names), 1, i + 1)
-      ax.axvline(x=self._ramp_up_duration, ls="--", color="green")
-      ax.axvline(x=self._total_duration - self._ramp_down_duration, ls="--", color="green")
+      ax.axvline(x=self._ramp_up_duration if not window else (self._ramp_up_duration * 1000), ls="--", color="green")
+      ax.axvline(x=(self._total_duration - self._ramp_down_duration) if not window else
+          ((self._total_duration - self._ramp_down_duration) * 1000), ls="--", color="green")
       ax.set_xlim((df.index.min(), df.index.max()))
       ax.set_ylim((0, 100))
       ax.grid(alpha=0.75)
       df.plot(ax=ax, kind="line", title="%s: %s - CPU Utilization" % (node_name, self._node_labels[node_name]),
-          xlabel="Time (sec)", ylabel="%s (%%)" % cpu_metric, grid=True, legend=False, yticks=range(0, 101, 10))
+          xlabel="Time (%s)" % ("sec" if not window else "millisec"), ylabel="%s (%%)" % cpu_metric, grid=True,
+          legend=False, yticks=range(0, 101, 10))
+    return fig
+
+  @LogAnalysis.save_fig
+  def plot_cpu_metric_comparison(self, cpu_metric="total", interval=None):
+    if not interval:
+      window = 1000
+      min_time = self._cpu.index.min()
+      max_time = self._cpu.index.max()
+    else:
+      window = None
+      (min_time, max_time) = interval
+    # Data frame
+    cpu = self._cpu[(self._cpu.index >= min_time) & (self._cpu.index <= max_time)]
+    cpu["node_label"] = cpu.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
+    df = pd.concat([cpu[(cpu["node_name"] == node_name) & (cpu["hw_no"].isin(self._cpu_cores[node_name]))]
+        for node_name in self._node_names]).\
+        groupby(["timestamp" if not window else ("window_%s" % window), "node_label"])[cpu_metric].mean().unstack()
+    if df.empty:
+      return None
+    # Plot
+    fig = plt.figure(figsize=(24, 12))
+    ax = fig.gca()
+    ax.axvline(x=self._ramp_up_duration if not window else (self._ramp_up_duration * 1000), ls="--", color="green")
+    ax.axvline(x=(self._total_duration - self._ramp_down_duration) if not window else
+        ((self._total_duration - self._ramp_down_duration) * 1000), ls="--", color="green")
+    ax.set_xlim((df.index.min(), df.index.max()))
+    ax.set_ylim((0, 100))
+    ax.grid(alpha=0.75)
+    df.interpolate(method='linear').plot(ax=ax, kind="line", title="CPU Utilization",
+        xlabel="Time (%s)" % ("sec" if not window else "millisec"),
+        ylabel="%s (%%)" % cpu_metric, grid=True, yticks=range(0, 101, 10))
     return fig
 
   def calculate_stats(self):
