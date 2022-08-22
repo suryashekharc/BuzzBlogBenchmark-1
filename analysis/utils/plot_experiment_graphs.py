@@ -507,7 +507,8 @@ class QueryLogAnalysis(LogAnalysis):
     ax.grid(alpha=0.75)
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.set_ylim((0, np.nanmax(df)))
-    df.plot(ax=ax, kind="line", title="Instantaneous %s Latency of Queries" % latency_percentile, xlabel="Time (millisec)",
+    df.interpolate(method='linear').plot(ax=ax, kind="line",
+        title="Instantaneous %s Latency of Queries" % latency_percentile, xlabel="Time (millisec)",
         ylabel="Latency (millisec)", grid=True)
     return fig
 
@@ -641,7 +642,8 @@ class RPCLogAnalysis(LogAnalysis):
     ax.grid(alpha=0.75)
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.set_ylim((0, np.nanmax(df)))
-    df.plot(ax=ax, kind="line", title="Instantaneous %s Latency of RPC" % latency_percentile, xlabel="Time (millisec)",
+    df.interpolate(method='linear').plot(ax=ax, kind="line",
+        title="Instantaneous %s Latency of RPC" % latency_percentile, xlabel="Time (millisec)",
         ylabel="Latency (millisec)", grid=True)
     return fig
 
@@ -913,8 +915,8 @@ class TCPListenBacklogLogAnalysis(LogAnalysis):
     ax.grid(alpha=0.75)
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.set_ylim((0, np.nanmax(df)))
-    df.plot(ax=ax, kind="line", title="TCP Listen Backlog Length", xlabel="Time (millisec)",
-        ylabel="Count (Requests)", grid=True)
+    df.interpolate(method='linear').plot(ax=ax, kind="line", title="TCP Listen Backlog Length",
+        xlabel="Time (millisec)", ylabel="Count (Requests)", grid=True)
     return fig
 
   def calculate_stats(self):
