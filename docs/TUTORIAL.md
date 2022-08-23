@@ -118,7 +118,7 @@ sudo docker run \
     --volume /tmp:/var/log/BuzzBlogBenchmark \
     --volume $(pwd)/.ssh:/home/$(whoami)/.ssh \
     $(echo $(cat /etc/hosts | grep node- | sed 's/[[:space:]]/ /g' | cut -d ' ' -f 1,4 | sed 's:^\(.*\) \(.*\):\2\:\1:' | awk '{print "--add-host="$1""}')) \
-    rodrigoalveslima/buzzblog:benchmarkcontroller_v1.4
+    rodrigoalveslima/buzzblog:benchmarkcontroller_v1.5
 ```
 
 If you want to run multiple experiments:
