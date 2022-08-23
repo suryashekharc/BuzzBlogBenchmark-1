@@ -645,7 +645,7 @@ class RPCLogAnalysis(LogAnalysis):
       ax.set_xlim((min_time * 1000, max_time * 1000))
       ax.set_ylim((0, df.values.max()))
       df.interpolate(method='linear').plot(ax=ax, kind="line", title="Instantaneous Latency of Service - %s" % service,
-          xlabel="Time (millisec)", ylabel="Latency (millisec)", grid=True)
+          xlabel="Time (millisec)" if not short else "", ylabel="Latency (millisec)", grid=True)
     return fig
 
   @LogAnalysis.save_fig
