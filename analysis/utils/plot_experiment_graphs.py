@@ -588,6 +588,7 @@ class RPCLogAnalysis(LogAnalysis):
     super().__init__(experiment_dirpath, output_dirpath)
     self._rpc = build_rpc_df(experiment_dirpath, exploded_window_in_ms=None)
     self._function_names = sorted(self._rpc["function"].unique())
+    self._service_names = sorted([fn.split(':')[0] for fn in self._function_names])
 
   @LogAnalysis.save_fig
   def plot_instantaneous_latency_of_rpcs(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
@@ -616,6 +617,35 @@ class RPCLogAnalysis(LogAnalysis):
       ax.set_ylim((0, df.values.max()))
       df.plot(ax=ax, kind="line", title="Instantaneous Latency of RPC - %s" % function, xlabel="Time (millisec)",
           ylabel="Latency (millisec)", grid=True)
+    return fig
+
+  @LogAnalysis.save_fig
+  def plot_instantaneous_latency_of_services(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None,
+      services=None, short=False):
+    if not interval:
+      window = 1000
+      min_time = self._rpc.index.min()
+      max_time = self._rpc.index.max()
+    else:
+      window = 10
+      (min_time, max_time) = interval
+    fig = plt.figure(figsize=(24, len(services or self._service_names) * (12 if not short else 4)))
+    for (i, service) in enumerate(services or self._service_names):
+      # Data frame
+      df = self._rpc[(self._rpc.index >= min_time) & (self._rpc.index <= max_time) &
+          (self._rpc["function"].isin([fn for fn in self._function_names if fn.split(':')[0] == service]))].\
+          groupby(["window_%s" % window])["latency"].quantile(latency_percentiles).unstack()
+      if df.empty:
+        continue
+      # Plot
+      ax = fig.add_subplot(len(services or self._service_names), 1, i + 1)
+      ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
+      ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
+      ax.grid(alpha=0.75)
+      ax.set_xlim((min_time * 1000, max_time * 1000))
+      ax.set_ylim((0, df.values.max()))
+      df.interpolate(method='linear').plot(ax=ax, kind="line", title="Instantaneous Latency of Service - %s" % service,
+          xlabel="Time (millisec)", ylabel="Latency (millisec)", grid=True)
     return fig
 
   @LogAnalysis.save_fig
