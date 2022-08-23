@@ -6,6 +6,7 @@ eventlet.monkey_patch(socket=True)
 
 import argparse
 import datetime
+import gc
 import random
 import string
 
@@ -174,6 +175,8 @@ class BuzzBlogSession(ATLoad.Session):
 
 
 if __name__ == "__main__":
+  # Disable garbage collection.
+  gc.set_threshold(0)
   # Parse command-line arguments.
   parser = argparse.ArgumentParser(description="Generate a BuzzBlog workload")
   parser.add_argument("--workload_conf", required=True, action="store",
