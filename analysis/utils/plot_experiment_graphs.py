@@ -769,6 +769,68 @@ class ServerRequestLogAnalysis(LogAnalysis):
     return fig
 
 
+class TCPSynBacklogLogAnalysis(LogAnalysis):
+  def __init__(self, experiment_dirpath, output_dirpath=None):
+    super().__init__(experiment_dirpath, output_dirpath)
+    self._bl = build_tcp_synbl_df(experiment_dirpath)
+
+  @LogAnalysis.save_fig
+  def plot_syn_backlog_length(self, interval=None, node_names=None, short=False):
+    if not interval:
+      window = 1000
+      min_time = self._bl.index.min()
+      max_time = self._bl.index.max()
+    else:
+      window = 10
+      (min_time, max_time) = interval
+    fig = plt.figure(figsize=(24, len(node_names or self._node_names) * (12 if not short else 4)))
+    for (i, node_name) in enumerate(node_names or self._node_names):
+      # Data frame
+      df = self._bl[(self._bl["node_name"] == node_name) & (self._bl.index >= min_time) &
+          (self._bl.index <= max_time)].groupby(["window_%s" % window])["synbl"].max()
+      if df.empty:
+        continue
+      # Plot
+      ax = fig.add_subplot(len(node_names or self._node_names), 1, i + 1)
+      ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
+      ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
+      ax.grid(alpha=0.75)
+      ax.set_xlim((min_time * 1000, max_time * 1000))
+      ax.set_ylim((0, df.values.max()))
+      df.interpolate(method='linear').plot(ax=ax, kind="line",
+          title="%s: %s - TCP SYN Backlog Length" % (node_name, self._node_labels[node_name]),
+          xlabel="Time (millisec)" if not short else "", ylabel="Count (Requests)", color="black", grid=True)
+    return fig
+
+  @LogAnalysis.save_fig
+  def plot_syn_backlog_length_comparison(self, interval=None):
+    if not interval:
+      window = 1000
+      min_time = self._bl.index.min()
+      max_time = self._bl.index.max()
+    else:
+      window = 10
+      (min_time, max_time) = interval
+    # Data frame
+    df = self._bl[(self._bl.index >= min_time) & (self._bl.index <= max_time)]
+    df["node_label"] = df.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
+    df = df.groupby(["window_%s" % window, "node_label"])["synbl"].max().unstack().fillna(0)
+    if df.empty:
+      return None
+    df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
+    # Plot
+    fig = plt.figure(figsize=(24, 12))
+    ax = fig.gca()
+    ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
+    ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
+    ax.grid(alpha=0.75)
+    ax.set_xlim((min_time * 1000, max_time * 1000))
+    ax.set_ylim((0, np.nanmax(df)))
+    df.interpolate(method='linear').plot(ax=ax, kind="line", title="TCP SYN Backlog Length",
+        xlabel="Time (millisec)", ylabel="Count (Requests)", grid=True)
+    return fig
+
+
 class TCPAcceptQueueLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
     super().__init__(experiment_dirpath, output_dirpath)
@@ -787,7 +849,7 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
     for (i, node_name) in enumerate(node_names or self._node_names):
       # Data frame
       df = self._queue[(self._queue["node_name"] == node_name) & (self._queue.index >= min_time) &
-          (self._queue.index <= max_time)].groupby(["window_%s" % window])["len"].max()
+          (self._queue.index <= max_time)].groupby(["window_%s" % window])["qlen"].max()
       if df.empty:
         continue
       # Plot
@@ -798,7 +860,7 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
       ax.set_xlim((min_time * 1000, max_time * 1000))
       ax.set_ylim((0, df.values.max()))
       df.interpolate(method='linear').plot(ax=ax, kind="line",
-          title="%s: %s - TCP Listen Backlog Length" % (node_name, self._node_labels[node_name]),
+          title="%s: %s - TCP Accept Queue Length" % (node_name, self._node_labels[node_name]),
           xlabel="Time (millisec)" if not short else "", ylabel="Count (Requests)", color="black", grid=True)
     return fig
 
@@ -814,7 +876,7 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
     # Data frame
     df = self._queue[(self._queue.index >= min_time) & (self._queue.index <= max_time)]
     df["node_label"] = df.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
-    df = df.groupby(["window_%s" % window, "node_label"])["len"].max().unstack().fillna(0)
+    df = df.groupby(["window_%s" % window, "node_label"])["qlen"].max().unstack().fillna(0)
     if df.empty:
       return None
     df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
@@ -826,7 +888,7 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
     ax.grid(alpha=0.75)
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.set_ylim((0, np.nanmax(df)))
-    df.interpolate(method='linear').plot(ax=ax, kind="line", title="TCP Listen Backlog Length",
+    df.interpolate(method='linear').plot(ax=ax, kind="line", title="TCP Accept Queue Length",
         xlabel="Time (millisec)", ylabel="Count (Requests)", grid=True)
     return fig
 
@@ -894,8 +956,8 @@ def main():
     output_dirpath = os.path.join(os.path.abspath(""), "..", "graphs", os.path.basename(experiment_dirpath))
     os.mkdir(output_dirpath)
     for notebook_cls in [RequestLogAnalysis, CollectlCPULogAnalysis, CollectlDskLogAnalysis, CollectlMemLogAnalysis,
-        QueryLogAnalysis, RedisLogAnalysis, RPCLogAnalysis, ServerRequestLogAnalysis, TCPAcceptQueueLogAnalysis,
-        TCPRetransLogAnalysis]:
+        QueryLogAnalysis, RedisLogAnalysis, RPCLogAnalysis, ServerRequestLogAnalysis, TCPSynBacklogLogAnalysis,
+        TCPAcceptQueueLogAnalysis, TCPRetransLogAnalysis]:
       try:
         notebook = notebook_cls(experiment_dirpath, output_dirpath)
         notebook.plot(distribution=args.distribution)
