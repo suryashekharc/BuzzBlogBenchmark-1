@@ -155,8 +155,8 @@ def get_collectl_dsk_df(experiment_dirpath):
                   pd.read_csv(csvfile, parse_dates=["timestamp"]).assign(node_name=node_name))
 
 
-def get_tcplistenbl_df(experiment_dirpath):
-  tarball_name = "tcplistenbl-bpftrace.tar.gz"
+def get_tcpacceptq_df(experiment_dirpath):
+  tarball_name = "tcpacceptq-bpftrace.tar.gz"
   for node_name in get_node_names(experiment_dirpath):
     if tarball_name in os.listdir(os.path.join(experiment_dirpath, "logs", node_name)):
       tarball_path = os.path.join(experiment_dirpath, "logs", node_name, tarball_name)
@@ -326,11 +326,11 @@ def build_collectl_mem_df(experiment_dirpath):
   return mem
 
 
-def build_tcp_listenbl_df(experiment_dirpath):
+def build_tcp_acceptq_df(experiment_dirpath):
   # Extract experiment information.
   start_time = get_experiment_start_time(experiment_dirpath) - pd.Timedelta(hours=6)
   # Build data frame.
-  bl = pd.concat([df[2] for df in get_tcplistenbl_df(experiment_dirpath)])
+  bl = pd.concat([df[2] for df in get_tcpacceptq_df(experiment_dirpath)])
   # (Re) Build columns.
   bl["timestamp"] = bl.apply(lambda r: (r["timestamp"] - start_time).total_seconds(), axis=1)
   bl["window_1000"] = bl["timestamp"].round(0).multiply(1000)

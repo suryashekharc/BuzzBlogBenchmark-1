@@ -888,25 +888,25 @@ class ServerRequestLogAnalysis(LogAnalysis):
     return stats
 
 
-class TCPListenBacklogLogAnalysis(LogAnalysis):
+class TCPAcceptQueueLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
     super().__init__(experiment_dirpath, output_dirpath)
-    self._bl = build_tcp_listenbl_df(experiment_dirpath)
+    self._queue = build_tcp_acceptq_df(experiment_dirpath)
 
   @LogAnalysis.save_fig
-  def plot_listen_backlog_length(self, interval=None, node_names=None, short=False):
+  def plot_accept_queue_length(self, interval=None, node_names=None, short=False):
     if not interval:
       window = 1000
-      min_time = self._bl.index.min()
-      max_time = self._bl.index.max()
+      min_time = self._queue.index.min()
+      max_time = self._queue.index.max()
     else:
       window = 10
       (min_time, max_time) = interval
     fig = plt.figure(figsize=(24, len(node_names or self._node_names) * (12 if not short else 4)))
     for (i, node_name) in enumerate(node_names or self._node_names):
       # Data frame
-      df = self._bl[(self._bl["node_name"] == node_name) & (self._bl.index >= min_time) &
-          (self._bl.index <= max_time)].groupby(["window_%s" % window])["len"].max()
+      df = self._queue[(self._queue["node_name"] == node_name) & (self._queue.index >= min_time) &
+          (self._queue.index <= max_time)].groupby(["window_%s" % window])["len"].max()
       if df.empty:
         continue
       # Plot
@@ -922,16 +922,16 @@ class TCPListenBacklogLogAnalysis(LogAnalysis):
     return fig
 
   @LogAnalysis.save_fig
-  def plot_listen_backlog_length_comparison(self, interval=None):
+  def plot_accept_queue_length_comparison(self, interval=None):
     if not interval:
       window = 1000
-      min_time = self._bl.index.min()
-      max_time = self._bl.index.max()
+      min_time = self._queue.index.min()
+      max_time = self._queue.index.max()
     else:
       window = 10
       (min_time, max_time) = interval
     # Data frame
-    df = self._bl[(self._bl.index >= min_time) & (self._bl.index <= max_time)]
+    df = self._queue[(self._queue.index >= min_time) & (self._queue.index <= max_time)]
     df["node_label"] = df.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
     df = df.groupby(["window_%s" % window, "node_label"])["len"].max().unstack().fillna(0)
     if df.empty:
@@ -953,28 +953,28 @@ class TCPListenBacklogLogAnalysis(LogAnalysis):
     stats = {}
     for node_name in self._node_names:
       node_label = self._node_labels[node_name]
-      bl = self._bl[(self._bl["node_name"] == node_name) & (self._bl.index >= self._ramp_up_duration) &
-          (self._bl.index <= self._total_duration - self._ramp_down_duration)].groupby(["window_1000"])["len"].max()
-      if bl.empty:
+      queue  = self._queue[(self._queue["node_name"] == node_name) & (self._queue.index >= self._ramp_up_duration) &
+          (self._queue.index <= self._total_duration - self._ramp_down_duration)].groupby(["window_1000"])["len"].max()
+      if queue.empty:
         stats.update({
-            "tcp_%s_listenbl_p999" % node_label: 0,
-            "tcp_%s_listenbl_p99" % node_label: 0,
-            "tcp_%s_listenbl_p95" % node_label: 0,
-            "tcp_%s_listenbl_p50" % node_label: 0,
-            "tcp_%s_listenbl_avg" % node_label: 0,
-            "tcp_%s_listenbl_std" % node_label: 0,
-            "tcp_%s_listenbl_max" % node_label: 0,
+            "tcp_%s_acceptq_p999" % node_label: 0,
+            "tcp_%s_acceptq_p99" % node_label: 0,
+            "tcp_%s_acceptq_p95" % node_label: 0,
+            "tcp_%s_acceptq_p50" % node_label: 0,
+            "tcp_%s_acceptq_avg" % node_label: 0,
+            "tcp_%s_acceptq_std" % node_label: 0,
+            "tcp_%s_acceptq_max" % node_label: 0,
         })
       else:
-        bl = bl.reindex(range(int(bl.index.min()), int(bl.index.max()) + 1, 1000), fill_value=0)
+        queue = queue.reindex(range(int(queue.index.min()), int(queue.index.max()) + 1, 1000), fill_value=0)
         stats.update({
-            "tcp_%s_listenbl_p999" % node_label: bl.quantile(0.999),
-            "tcp_%s_listenbl_p99" % node_label: bl.quantile(0.99),
-            "tcp_%s_listenbl_p95" % node_label: bl.quantile(0.95),
-            "tcp_%s_listenbl_p50" % node_label: bl.quantile(0.50),
-            "tcp_%s_listenbl_avg" % node_label: bl.mean(),
-            "tcp_%s_listenbl_std" % node_label: bl.std(),
-            "tcp_%s_listenbl_max" % node_label: bl.max(),
+            "tcp_%s_acceptq_p999" % node_label: queue.quantile(0.999),
+            "tcp_%s_acceptq_p99" % node_label: queue.quantile(0.99),
+            "tcp_%s_acceptq_p95" % node_label: queue.quantile(0.95),
+            "tcp_%s_acceptq_p50" % node_label: queue.quantile(0.50),
+            "tcp_%s_acceptq_avg" % node_label: queue.mean(),
+            "tcp_%s_acceptq_std" % node_label: queue.std(),
+            "tcp_%s_acceptq_max" % node_label: queue.max(),
         })
     return stats
 
@@ -1051,7 +1051,7 @@ def main():
     output_dirpath = os.path.join(os.path.abspath(""), "..", "graphs", os.path.basename(experiment_dirpath))
     os.mkdir(output_dirpath)
     for notebook_cls in [RequestLogAnalysis, CollectlCPULogAnalysis, CollectlDskLogAnalysis, CollectlMemLogAnalysis,
-        QueryLogAnalysis, RedisLogAnalysis, RPCLogAnalysis, ServerRequestLogAnalysis, TCPListenBacklogLogAnalysis,
+        QueryLogAnalysis, RedisLogAnalysis, RPCLogAnalysis, ServerRequestLogAnalysis, TCPAcceptQueueLogAnalysis,
         TCPRetransLogAnalysis]:
       try:
         notebook = notebook_cls(experiment_dirpath, output_dirpath)
