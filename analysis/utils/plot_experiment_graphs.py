@@ -769,6 +769,41 @@ class ServerRequestLogAnalysis(LogAnalysis):
     return fig
 
 
+class RunQueueLengthLogAnalysis(LogAnalysis):
+  def __init__(self, experiment_dirpath, output_dirpath=None):
+    super().__init__(experiment_dirpath, output_dirpath)
+    self._queue = build_runqlen_df(experiment_dirpath)
+
+  @LogAnalysis.save_fig
+  def plot_run_queue_length(self, interval=None, node_names=None, short=False):
+    if not interval:
+      window = 1000
+      min_time = self._queue.index.min()
+      max_time = self._queue.index.max()
+    else:
+      window = 10
+      (min_time, max_time) = interval
+    fig = plt.figure(figsize=(24, len(node_names or self._node_names) * (12 if not short else 4)))
+    for (i, node_name) in enumerate(node_names or self._node_names):
+      # Data frame
+      df = self._queue[(self._queue["node_name"] == node_name) & (self._queue.index >= min_time) &
+          (self._queue.index <= max_time)].groupby(["window_%s" % window, "cpu"])["qlen"].mean().unstack().fillna(0)
+      if df.empty:
+        continue
+      df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
+      # Plot
+      ax = fig.add_subplot(len(node_names or self._node_names), 1, i + 1)
+      ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
+      ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
+      ax.grid(alpha=0.75)
+      ax.set_xlim((min_time * 1000, max_time * 1000))
+      ax.set_ylim((0, df.values.max()))
+      df.interpolate(method='linear').plot(ax=ax, kind="line",
+          title="%s: %s - CPU Run Queue Length" % (node_name, self._node_labels[node_name]),
+          xlabel="Time (millisec)" if not short else "", ylabel="Count (Tasks)", color="black", grid=True)
+    return fig
+
+
 class TCPSynBacklogLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
     super().__init__(experiment_dirpath, output_dirpath)
