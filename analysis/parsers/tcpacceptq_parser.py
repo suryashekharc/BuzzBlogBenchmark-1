@@ -7,11 +7,11 @@ import re
 import pandas as pd
 
 # Constants
-COLUMNS = ["timestamp", "pid", "command", "len", "max"]
-TCPLISTENBL_LOG_PATTERN = r"^([0-9\.\-\:]+)\s+(\d+)\s+([^\s]+)\s+(\d+)/(\d+)$"
+COLUMNS = ["timestamp", "port", "qlen"]
+TCPACCEPTQ_LOG_PATTERN = r"^([0-9\.\-\:]+)\s+(\d+)\s+(\d+)$"
 
 
-class TcplistenblParser:
+class TcpacceptqParser:
     @classmethod
     def df(cls, logfile):
         data = [cls.extract_values_from_log(log) for log in logfile]
@@ -19,11 +19,11 @@ class TcplistenblParser:
 
     @staticmethod
     def extract_values_from_log(log):
-        match = re.match(TCPLISTENBL_LOG_PATTERN, log.strip())
+        match = re.match(TCPACCEPTQ_LOG_PATTERN, log.strip())
         if not match:
             return None
-        timestamp, pid, command, len, max = match.groups()
-        return (timestamp, pid, command, len, max)
+        timestamp, port, qlen = match.groups()
+        return (timestamp, port, qlen)
 
 
 if __name__ == "__main__":
@@ -34,4 +34,4 @@ if __name__ == "__main__":
             type=str, help="Path to CSV file (output)")
     args = parser.parse_args()
     with open(args.log_filepath) as logfile:
-        TcplistenblParser.df(logfile).to_csv(args.csv_filepath, index=False)
+        TcpacceptqParser.df(logfile).to_csv(args.csv_filepath, index=False)

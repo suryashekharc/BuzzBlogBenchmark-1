@@ -200,7 +200,7 @@ def save_system_specs(node_hostname, node_conf, ssh_client):
 
 @nodes_with_container(".+")
 def install_buzzblogbenchmark(node_hostname, node_conf, ssh_client):
-  VERSION = "1.6"
+  VERSION = "1.7"
   ssh_client.exec(
       "sudo mkdir -p /opt/BuzzBlogBenchmark && "
       "sudo curl "
@@ -390,8 +390,11 @@ def fetch_monitoring_data(node_hostname, node_conf, ssh_client):
         ssh_client.exec("for filename in $(find %s -name '*.gz' -type f); do "
             "python3 /opt/BuzzBlogBenchmark/analysis/parsers/collectl_parser.py "
             "--log_filepath ${filename} --csv_filepath ${filename/.gz/.csv}; done" % monitor_conf["dirpath"])
-      if monitor_name == "tcplistenbl-bpftrace":
-        ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/tcplistenbl_parser.py "
+      if monitor_name == "tcpsynbl-bpftrace":
+        ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/tcpsynbl_parser.py "
+            "--log_filepath {dirpath}/log --csv_filepath {dirpath}/log.csv".format(dirpath=monitor_conf["dirpath"]))
+      if monitor_name == "tcpacceptq-bpftrace":
+        ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/tcpacceptq_parser.py "
             "--log_filepath {dirpath}/log --csv_filepath {dirpath}/log.csv".format(dirpath=monitor_conf["dirpath"]))
       if monitor_name == "tcpretrans-bpftrace":
         ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/tcpretrans_parser.py "

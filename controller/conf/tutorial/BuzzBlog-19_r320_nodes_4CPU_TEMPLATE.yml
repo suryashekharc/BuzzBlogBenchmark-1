@@ -290,10 +290,15 @@ node-4:
           - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
           - "port=1080"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -365,10 +370,15 @@ node-5:
           - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
           - "port=1080"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -440,10 +450,15 @@ node-6:
           - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
           - "port=1080"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -515,10 +530,15 @@ node-7:
           - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
           - "port=1080"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -594,10 +614,15 @@ node-8:
           - "postgres_user=postgres"
           - "postgres_password=postgres"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -669,10 +694,15 @@ node-9:
           - "POSTGRES_DB=account"
           - "POSTGRES_HOST_AUTH_METHOD=trust"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -745,10 +775,15 @@ node-10:
           - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
           - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -821,10 +856,15 @@ node-11:
           - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
           - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -900,10 +940,15 @@ node-12:
           - "postgres_user=postgres"
           - "postgres_password=postgres"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -975,10 +1020,15 @@ node-13:
           - "POSTGRES_DB=post"
           - "POSTGRES_HOST_AUTH_METHOD=trust"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1053,10 +1103,15 @@ node-14:
           - "postgres_user=postgres"
           - "postgres_password=postgres"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1128,10 +1183,15 @@ node-15:
           - "POSTGRES_DB=uniquepair"
           - "POSTGRES_HOST_AUTH_METHOD=trust"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1205,10 +1265,15 @@ node-16:
           - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
           - "redis_connection_pool_size={{THRIFTREDISCONNPOOLSIZE}}"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1284,10 +1349,15 @@ node-17:
           - "/etc/redis:/etc/redis"
         detach: ""
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1358,10 +1428,15 @@ node-18:
           - "accept_backlog={{THRIFTACCEPTQUEUE}}"
           - "n_invalid_words={{NINVALIDWORDS}}"
   monitors:
-    tcplistenbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplistenbl.bt 1"
-      dirpath: "/tmp/tcplistenbl-bpftrace"
-      log: "/tmp/tcplistenbl-bpftrace/log"
+    tcpsynbl-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
+      dirpath: "/tmp/tcpsynbl-bpftrace"
+      log: "/tmp/tcpsynbl-bpftrace/log"
+      niceness: 19
+    tcpacceptq-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
+      dirpath: "/tmp/tcpacceptq-bpftrace"
+      log: "/tmp/tcpacceptq-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"

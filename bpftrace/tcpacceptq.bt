@@ -1,0 +1,28 @@
+/*
+ * tcpacceptq - Monitor TCP accept queue length.
+ *
+ * Positional parameters:
+ *  $1: Sampling rate.
+ *
+ * Copyright (C) 2020 Georgia Tech Center for Experimental Research in Computer
+ * Systems
+ *
+ * Author: Rodrigo Alves Lima
+ */
+
+#ifndef BPFTRACE_HAVE_BTF
+#include <net/sock.h>
+#endif
+
+BEGIN {
+  printf("%-26s %-5s %-5s\n", "TIME", "PORT", "QLEN");
+}
+
+/* Trace arrival of TCP ACK packet. */
+kprobe:tcp_v4_syn_recv_sock {
+  if (nsecs % ((uint64) $1) == 0) {
+    printf("%-26s %-5d %-5d\n", strftime("%Y-%m-%d-%H:%M:%S.%f", nsecs),
+        ((struct sock *) arg0)->__sk_common.skc_num,
+        ((struct sock *) arg0)->sk_ack_backlog + 1);
+  }
+}
