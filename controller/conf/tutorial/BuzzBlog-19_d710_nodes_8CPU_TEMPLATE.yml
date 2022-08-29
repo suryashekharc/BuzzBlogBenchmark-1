@@ -284,6 +284,11 @@ node-4:
           - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
           - "port=1080"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -359,6 +364,11 @@ node-5:
           - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
           - "port=1080"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -434,6 +444,11 @@ node-6:
           - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
           - "port=1080"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -509,6 +524,11 @@ node-7:
           - "microservice_connection_pool_size={{GUNICORNSERVICECONNPOOLSIZE}}"
           - "port=1080"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -588,6 +608,11 @@ node-8:
           - "postgres_user=postgres"
           - "postgres_password=postgres"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -668,6 +693,11 @@ node-9:
           - "POSTGRES_DB=account"
           - "POSTGRES_HOST_AUTH_METHOD=trust"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -749,6 +779,11 @@ node-10:
           - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
           - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -830,6 +865,11 @@ node-11:
           - "backend_filepath=/etc/opt/BuzzBlog/backend.yml"
           - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -909,6 +949,11 @@ node-12:
           - "postgres_user=postgres"
           - "postgres_password=postgres"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -989,6 +1034,11 @@ node-13:
           - "POSTGRES_DB=post"
           - "POSTGRES_HOST_AUTH_METHOD=trust"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -1072,6 +1122,11 @@ node-14:
           - "postgres_user=postgres"
           - "postgres_password=postgres"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -1152,6 +1207,11 @@ node-15:
           - "POSTGRES_DB=uniquepair"
           - "POSTGRES_HOST_AUTH_METHOD=trust"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -1234,6 +1294,11 @@ node-16:
           - "microservice_connection_pool_size={{THRIFTSERVICECONNPOOLSIZE}}"
           - "redis_connection_pool_size={{THRIFTREDISCONNPOOLSIZE}}"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -1318,6 +1383,11 @@ node-17:
           - "/etc/redis:/etc/redis"
         detach: ""
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
@@ -1397,6 +1467,11 @@ node-18:
           - "accept_backlog={{THRIFTACCEPTQUEUE}}"
           - "n_invalid_words={{NINVALIDWORDS}}"
   monitors:
+    runqlen-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/runqlen.bt"
+      dirpath: "/tmp/runqlen-bpftrace"
+      log: "/tmp/runqlen-bpftrace/log"
+      niceness: 19
     tcpsynbl-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
       dirpath: "/tmp/tcpsynbl-bpftrace"
