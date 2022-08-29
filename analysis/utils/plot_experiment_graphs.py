@@ -296,25 +296,6 @@ class CollectlCPULogAnalysis(LogAnalysis):
         ylabel="%s (%%)" % cpu_metric, grid=True, yticks=range(0, 101, 10))
     return fig
 
-  def calculate_stats(self):
-    stats = {}
-    for node_name in self._node_names:
-      node_label = self._node_labels[node_name]
-      cpu = self._cpu[(self._cpu["node_name"] == node_name) & (self._cpu["hw_no"].isin(self._cpu_cores[node_name])) &
-          (self._cpu.index >= self._ramp_up_duration) &
-          (self._cpu.index <= self._total_duration - self._ramp_down_duration)]
-      for cpu_metric in ["total", "user", "system", "wait", "idle"]:
-        stats.update({
-            "collectl_cpu_%s_%s_p999" % (node_label, cpu_metric): cpu[cpu_metric].quantile(0.999),
-            "collectl_cpu_%s_%s_p99" % (node_label, cpu_metric): cpu[cpu_metric].quantile(0.99),
-            "collectl_cpu_%s_%s_p95" % (node_label, cpu_metric): cpu[cpu_metric].quantile(0.95),
-            "collectl_cpu_%s_%s_p50" % (node_label, cpu_metric): cpu[cpu_metric].quantile(0.50),
-            "collectl_cpu_%s_%s_avg" % (node_label, cpu_metric): cpu[cpu_metric].mean(),
-            "collectl_cpu_%s_%s_std" % (node_label, cpu_metric): cpu[cpu_metric].std(),
-            "collectl_cpu_%s_%s_max" % (node_label, cpu_metric): cpu[cpu_metric].max(),
-        })
-    return stats
-
 
 class CollectlDskLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
@@ -363,25 +344,6 @@ class CollectlDskLogAnalysis(LogAnalysis):
           xlabel="Time (sec)", ylabel=dsk_metric, grid=True, legend=False)
     return fig
 
-  def calculate_stats(self):
-    stats = {}
-    for node_name in self._node_names:
-      node_label = self._node_labels[node_name]
-      dsk = self._dsk[(self._dsk["node_name"] == node_name) &
-          (self._dsk.index >= self._ramp_up_duration) &
-          (self._dsk.index <= self._total_duration - self._ramp_down_duration)]
-      for dsk_metric in ["reads", "writes", "rkbytes", "wkbytes", "quelen", "wait"]:
-        stats.update({
-            "collectl_dsk_%s_%s_p999" % (node_label, dsk_metric): dsk[dsk_metric].quantile(0.999),
-            "collectl_dsk_%s_%s_p99" % (node_label, dsk_metric): dsk[dsk_metric].quantile(0.99),
-            "collectl_dsk_%s_%s_p95" % (node_label, dsk_metric): dsk[dsk_metric].quantile(0.95),
-            "collectl_dsk_%s_%s_p50" % (node_label, dsk_metric): dsk[dsk_metric].quantile(0.50),
-            "collectl_dsk_%s_%s_avg" % (node_label, dsk_metric): dsk[dsk_metric].mean(),
-            "collectl_dsk_%s_%s_std" % (node_label, dsk_metric): dsk[dsk_metric].std(),
-            "collectl_dsk_%s_%s_max" % (node_label, dsk_metric): dsk[dsk_metric].max(),
-        })
-    return stats
-
 
 class CollectlMemLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
@@ -429,25 +391,6 @@ class CollectlMemLogAnalysis(LogAnalysis):
       df.plot(ax=ax, kind="line", title="%s: %s - Memory Utilization" % (node_name, self._node_labels[node_name]),
           xlabel="Time (sec)", ylabel=mem_metric, grid=True, legend=False)
     return fig
-
-  def calculate_stats(self):
-    stats = {}
-    for node_name in self._node_names:
-      node_label = self._node_labels[node_name]
-      mem = self._mem[(self._mem["node_name"] == node_name) &
-          (self._mem.index >= self._ramp_up_duration) &
-          (self._mem.index <= self._total_duration - self._ramp_down_duration)]
-      for mem_metric in ["used", "free"]:
-        stats.update({
-            "collectl_mem_%s_%s_p999" % (node_label, mem_metric): mem[mem_metric].quantile(0.999),
-            "collectl_mem_%s_%s_p99" % (node_label, mem_metric): mem[mem_metric].quantile(0.99),
-            "collectl_mem_%s_%s_p95" % (node_label, mem_metric): mem[mem_metric].quantile(0.95),
-            "collectl_mem_%s_%s_p50" % (node_label, mem_metric): mem[mem_metric].quantile(0.50),
-            "collectl_mem_%s_%s_avg" % (node_label, mem_metric): mem[mem_metric].mean(),
-            "collectl_mem_%s_%s_std" % (node_label, mem_metric): mem[mem_metric].std(),
-            "collectl_mem_%s_%s_max" % (node_label, mem_metric): mem[mem_metric].max(),
-        })
-    return stats
 
 
 class QueryLogAnalysis(LogAnalysis):
@@ -825,68 +768,6 @@ class ServerRequestLogAnalysis(LogAnalysis):
           xlabel="Time (millisec)", ylabel="Count (Requests)", color="black", grid=True)
     return fig
 
-  def calculate_stats(self):
-    stats = {}
-    for node_name in self._apigateway_node_names:
-      requests = self._requests[(self._requests["node_name"] == node_name) &
-          (self._requests.index >= self._ramp_up_duration) &
-          (self._requests.index <= self._total_duration - self._ramp_down_duration)].\
-          groupby(["window"])["window"].count()
-      requests = requests.reindex(range(int(requests.index.min()), int(requests.index.max()) + 1), fill_value=0)
-      stats.update({
-          "apigateway_%s_count_p999" % node_name: requests.quantile(0.999),
-          "apigateway_%s_count_p99" % node_name: requests.quantile(0.99),
-          "apigateway_%s_count_p95" % node_name: requests.quantile(0.95),
-          "apigateway_%s_count_p50" % node_name: requests.quantile(0.50),
-          "apigateway_%s_count_avg" % node_name: requests.mean(),
-          "apigateway_%s_count_std" % node_name: requests.std(),
-          "apigateway_%s_count_max" % node_name: requests.max(),
-      })
-    for service in self._services:
-      service_name = self._node_labels[service.split(':')[0]]
-      rpc = self._rpc[(self._rpc["server"] == service) &
-          (self._rpc.index >= self._ramp_up_duration) &
-          (self._rpc.index <= self._total_duration - self._ramp_down_duration)].groupby(["window"])["window"].count()
-      rpc = rpc.reindex(range(int(rpc.index.min()), int(rpc.index.max()) + 1), fill_value=0)
-      stats.update({
-          "service_%s_count_p999" % service_name: rpc.quantile(0.999),
-          "service_%s_count_p99" % service_name: rpc.quantile(0.99),
-          "service_%s_count_p95" % service_name: rpc.quantile(0.95),
-          "service_%s_count_p50" % service_name: rpc.quantile(0.50),
-          "service_%s_count_avg" % service_name: rpc.mean(),
-          "service_%s_count_std" % service_name: rpc.std(),
-          "service_%s_count_max" % service_name: rpc.max(),
-      })
-    for dbname in self._dbnames:
-      query = self._query[(self._query["dbname"] == dbname) &
-          (self._query.index >= self._ramp_up_duration) &
-          (self._query.index <= self._total_duration - self._ramp_down_duration)].groupby(["window"])["window"].count()
-      query = query.reindex(range(int(query.index.min()), int(query.index.max()) + 1), fill_value=0)
-      stats.update({
-          "db_%s_count_p999" % dbname: query.quantile(0.999),
-          "db_%s_count_p99" % dbname: query.quantile(0.99),
-          "db_%s_count_p95" % dbname: query.quantile(0.95),
-          "db_%s_count_p50" % dbname: query.quantile(0.50),
-          "db_%s_count_avg" % dbname: query.mean(),
-          "db_%s_count_std" % dbname: query.std(),
-          "db_%s_count_max" % dbname: query.max(),
-      })
-    for service in self._redis_services:
-      redis = self._redis[(self._redis["service_name"] == service) &
-          (self._redis.index >= self._ramp_up_duration) &
-          (self._redis.index <= self._total_duration - self._ramp_down_duration)].groupby(["window"])["window"].count()
-      redis = redis.reindex(range(int(redis.index.min()), int(redis.index.max()) + 1), fill_value=0)
-      stats.update({
-          "redis_%s_count_p999" % service: redis.quantile(0.999),
-          "redis_%s_count_p99" % service: redis.quantile(0.99),
-          "redis_%s_count_p95" % service: redis.quantile(0.95),
-          "redis_%s_count_p50" % service: redis.quantile(0.50),
-          "redis_%s_count_avg" % service: redis.mean(),
-          "redis_%s_count_std" % service: redis.std(),
-          "redis_%s_count_max" % service: redis.max(),
-      })
-    return stats
-
 
 class TCPAcceptQueueLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
@@ -949,35 +830,6 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
         xlabel="Time (millisec)", ylabel="Count (Requests)", grid=True)
     return fig
 
-  def calculate_stats(self):
-    stats = {}
-    for node_name in self._node_names:
-      node_label = self._node_labels[node_name]
-      queue  = self._queue[(self._queue["node_name"] == node_name) & (self._queue.index >= self._ramp_up_duration) &
-          (self._queue.index <= self._total_duration - self._ramp_down_duration)].groupby(["window_1000"])["len"].max()
-      if queue.empty:
-        stats.update({
-            "tcp_%s_acceptq_p999" % node_label: 0,
-            "tcp_%s_acceptq_p99" % node_label: 0,
-            "tcp_%s_acceptq_p95" % node_label: 0,
-            "tcp_%s_acceptq_p50" % node_label: 0,
-            "tcp_%s_acceptq_avg" % node_label: 0,
-            "tcp_%s_acceptq_std" % node_label: 0,
-            "tcp_%s_acceptq_max" % node_label: 0,
-        })
-      else:
-        queue = queue.reindex(range(int(queue.index.min()), int(queue.index.max()) + 1, 1000), fill_value=0)
-        stats.update({
-            "tcp_%s_acceptq_p999" % node_label: queue.quantile(0.999),
-            "tcp_%s_acceptq_p99" % node_label: queue.quantile(0.99),
-            "tcp_%s_acceptq_p95" % node_label: queue.quantile(0.95),
-            "tcp_%s_acceptq_p50" % node_label: queue.quantile(0.50),
-            "tcp_%s_acceptq_avg" % node_label: queue.mean(),
-            "tcp_%s_acceptq_std" % node_label: queue.std(),
-            "tcp_%s_acceptq_max" % node_label: queue.max(),
-        })
-    return stats
-
 
 class TCPRetransLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
@@ -1014,15 +866,6 @@ class TCPRetransLogAnalysis(LogAnalysis):
           ylabel="Count (Retransmissions)", color="black", grid=True)
     return fig
 
-  def calculate_stats(self):
-    stats = {}
-    for addr, port in self._addr_port:
-      retrans = self._retrans[(self._retrans["addr_port"] == (addr, port)) &
-          (self._retrans.index >= self._ramp_up_duration) &
-          (self._retrans.index <= self._total_duration - self._ramp_down_duration)]
-      stats["tcp_%s:%s_retrans" % (addr, port)] = retrans.shape[0]
-    return stats
-
 
 def main():
   # Parse command-line arguments.
@@ -1056,7 +899,6 @@ def main():
       try:
         notebook = notebook_cls(experiment_dirpath, output_dirpath)
         notebook.plot(distribution=args.distribution)
-        pprint.pprint(notebook.calculate_stats())
       except Exception as e:
         print("\tFailed: %s" % str(e))
         continue
