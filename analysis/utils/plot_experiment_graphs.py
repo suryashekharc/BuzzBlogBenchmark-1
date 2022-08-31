@@ -143,8 +143,8 @@ class RequestLogAnalysis(LogAnalysis):
   def plot_instantaneous_latency_of_requests(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
     if not interval:
       window = 1000
-      min_time = self._requests.index.min()
-      max_time = self._requests.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -171,8 +171,8 @@ class RequestLogAnalysis(LogAnalysis):
   def plot_request_throughput(self, interval=None):
     if not interval:
       window = 1000
-      min_time = self._requests.index.min()
-      max_time = self._requests.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -238,8 +238,8 @@ class CollectlCPULogAnalysis(LogAnalysis):
   def plot_cpu_metric(self, cpu_metric="total", interval=None, node_names=None, short=False):
     if not interval:
       window = 1000
-      min_time = self._cpu.index.min()
-      max_time = self._cpu.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = None
       (min_time, max_time) = interval
@@ -269,8 +269,8 @@ class CollectlCPULogAnalysis(LogAnalysis):
   def plot_cpu_metric_comparison(self, cpu_metric="total", interval=None):
     if not interval:
       window = 1000
-      min_time = self._cpu.index.min()
-      max_time = self._cpu.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = None
       (min_time, max_time) = interval
@@ -403,8 +403,8 @@ class QueryLogAnalysis(LogAnalysis):
   def plot_instantaneous_latency_of_queries(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
     if not interval:
       window = 1000
-      min_time = self._query.index.min()
-      max_time = self._query.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -432,8 +432,8 @@ class QueryLogAnalysis(LogAnalysis):
   def plot_instantaneous_latency_of_queries_comparison(self, latency_percentile=0.99, interval=None):
     if not interval:
       window = 1000
-      min_time = self._query.index.min()
-      max_time = self._query.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -484,8 +484,8 @@ class RedisLogAnalysis(LogAnalysis):
   def plot_instantaneous_latency_of_commands(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
     if not interval:
       window = 1000
-      min_time = self._redis.index.min()
-      max_time = self._redis.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -538,8 +538,8 @@ class RPCLogAnalysis(LogAnalysis):
   def plot_instantaneous_latency_of_rpcs(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
     if not interval:
       window = 1000
-      min_time = self._rpc.index.min()
-      max_time = self._rpc.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -568,8 +568,8 @@ class RPCLogAnalysis(LogAnalysis):
       services=None, short=False):
     if not interval:
       window = 1000
-      min_time = self._rpc.index.min()
-      max_time = self._rpc.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -596,8 +596,8 @@ class RPCLogAnalysis(LogAnalysis):
   def plot_instantaneous_latency_of_rpcs_comparison(self, latency_percentile=0.99, interval=None):
     if not interval:
       window = 1000
-      min_time = self._rpc.index.min()
-      max_time = self._rpc.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -665,8 +665,8 @@ class ServerRequestLogAnalysis(LogAnalysis):
   @LogAnalysis.save_fig
   def plot_number_of_concurrent_server_requests_in_apigateways(self, interval=None):
     if not interval:
-      min_time = self._requests.index.min()
-      max_time = self._requests.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       (min_time, max_time) = interval
     fig = plt.figure(figsize=(24, len(self._apigateway_node_names) * 12))
@@ -692,8 +692,8 @@ class ServerRequestLogAnalysis(LogAnalysis):
   @LogAnalysis.save_fig
   def plot_number_of_concurrent_server_requests_in_microservices(self, interval=None):
     if not interval:
-      min_time = self._rpc.index.min()
-      max_time = self._rpc.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       (min_time, max_time) = interval
     fig = plt.figure(figsize=(24, len(self._services) * 12))
@@ -719,8 +719,8 @@ class ServerRequestLogAnalysis(LogAnalysis):
   @LogAnalysis.save_fig
   def plot_number_of_concurrent_server_requests_in_databases(self, interval=None):
     if not interval:
-      min_time = self._query.index.min()
-      max_time = self._query.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       (min_time, max_time) = interval
     fig = plt.figure(figsize=(24, len(self._dbnames) * 12))
@@ -745,8 +745,8 @@ class ServerRequestLogAnalysis(LogAnalysis):
   @LogAnalysis.save_fig
   def plot_number_of_concurrent_server_requests_in_redis(self, interval=None):
     if not interval:
-      min_time = self._redis.index.min()
-      max_time = self._redis.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       (min_time, max_time) = interval
     fig = plt.figure(figsize=(24, len(self._redis_services) * 12))
@@ -778,8 +778,8 @@ class RunQueueLengthLogAnalysis(LogAnalysis):
   def plot_run_queue_length(self, interval=None, node_names=None, short=False):
     if not interval:
       window = 1000
-      min_time = self._queue.index.min()
-      max_time = self._queue.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -813,8 +813,8 @@ class TCPSynBacklogLogAnalysis(LogAnalysis):
   def plot_syn_backlog_length(self, interval=None, node_names=None, short=False):
     if not interval:
       window = 1000
-      min_time = self._bl.index.min()
-      max_time = self._bl.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -841,8 +841,8 @@ class TCPSynBacklogLogAnalysis(LogAnalysis):
   def plot_syn_backlog_length_comparison(self, interval=None):
     if not interval:
       window = 1000
-      min_time = self._bl.index.min()
-      max_time = self._bl.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -875,8 +875,8 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
   def plot_accept_queue_length(self, interval=None, node_names=None, short=False):
     if not interval:
       window = 1000
-      min_time = self._queue.index.min()
-      max_time = self._queue.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
@@ -903,8 +903,8 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
   def plot_accept_queue_length_comparison(self, interval=None):
     if not interval:
       window = 1000
-      min_time = self._queue.index.min()
-      max_time = self._queue.index.max()
+      min_time = 0
+      max_time = self._total_duration
     else:
       window = 10
       (min_time, max_time) = interval
