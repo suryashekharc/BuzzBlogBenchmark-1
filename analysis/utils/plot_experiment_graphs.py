@@ -800,7 +800,7 @@ class RunQueueLengthLogAnalysis(LogAnalysis):
       ax.set_ylim((0, df.values.max()))
       df.interpolate(method='linear').plot(ax=ax, kind="line",
           title="%s: %s - CPU Run Queue Length" % (node_name, self._node_labels[node_name]),
-          xlabel="Time (millisec)" if not short else "", ylabel="Count (Tasks)", color="black", grid=True)
+          xlabel="Time (millisec)" if not short else "", ylabel="Count (Tasks)", grid=True)
     return fig
 
 
@@ -991,8 +991,8 @@ def main():
     output_dirpath = os.path.join(os.path.abspath(""), "..", "graphs", os.path.basename(experiment_dirpath))
     os.mkdir(output_dirpath)
     for notebook_cls in [RequestLogAnalysis, CollectlCPULogAnalysis, CollectlDskLogAnalysis, CollectlMemLogAnalysis,
-        QueryLogAnalysis, RedisLogAnalysis, RPCLogAnalysis, ServerRequestLogAnalysis, TCPSynBacklogLogAnalysis,
-        TCPAcceptQueueLogAnalysis, TCPRetransLogAnalysis]:
+        QueryLogAnalysis, RedisLogAnalysis, RPCLogAnalysis, ServerRequestLogAnalysis, RunQueueLengthLogAnalysis,
+        TCPSynBacklogLogAnalysis, TCPAcceptQueueLogAnalysis, TCPRetransLogAnalysis]:
       try:
         notebook = notebook_cls(experiment_dirpath, output_dirpath)
         notebook.plot(distribution=args.distribution)
