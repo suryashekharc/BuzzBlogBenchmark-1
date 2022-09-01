@@ -35,6 +35,7 @@ BEGIN {
   @tcp_states[12] = "NEW_SYN_RECV";
 }
 
+/* Trace retransmission of TCP packet. */
 kprobe:tcp_retransmit_skb {
   $sk = (struct sock *) arg0;
   $inet_family = $sk->__sk_common.skc_family;
