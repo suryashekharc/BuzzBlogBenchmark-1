@@ -7,8 +7,8 @@ import re
 import pandas as pd
 
 # Constants
-COLUMNS = ["timestamp", "pid", "addr", "port", "state"]
-TCPRETRANS_LOG_PATTERN = r"^([0-9\.\-\:]+)\s+(\d+)\s+([^:]+):([^\s]+)\s+([^:]+):([^\s]+)\s+(.+)$"
+COLUMNS = ["timestamp", "addr", "port", "state"]
+TCPRETRANS_LOG_PATTERN = r"^([0-9\.\-\:]+)\s+([^:]+):([^\s]+)\s+([^:]+):([^\s]+)\s+(.+)$"
 
 
 class TcpretransParser:
@@ -22,8 +22,8 @@ class TcpretransParser:
         match = re.match(TCPRETRANS_LOG_PATTERN, log.strip())
         if not match:
             return None
-        timestamp, pid, _, _, addr, port, state = match.groups()
-        return (timestamp, pid, addr, port, state)
+        timestamp, _, _, addr, port, state = match.groups()
+        return (timestamp, addr, port, state)
 
 
 if __name__ == "__main__":
