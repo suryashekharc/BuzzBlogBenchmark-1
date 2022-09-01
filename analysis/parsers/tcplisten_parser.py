@@ -7,11 +7,11 @@ import re
 import pandas as pd
 
 # Constants
-COLUMNS = ["timestamp", "port", "qlen"]
-TCPACCEPTQ_LOG_PATTERN = r"^([0-9\.\-\:]+)\s+(\d+)\s+(\d+)$"
+COLUMNS = ["timestamp", "port", "synbl", "acceptq"]
+TCPLISTEN_LOG_PATTERN = r"^([0-9\.\-\:]+)\s+(\d+)\s+(\d+)\s+(\d+)$"
 
 
-class TcpacceptqParser:
+class TcplistenParser:
     @classmethod
     def df(cls, logfile):
         data = [cls.extract_values_from_log(log) for log in logfile]
@@ -19,11 +19,11 @@ class TcpacceptqParser:
 
     @staticmethod
     def extract_values_from_log(log):
-        match = re.match(TCPACCEPTQ_LOG_PATTERN, log.strip())
+        match = re.match(TCPLISTEN_LOG_PATTERN, log.strip())
         if not match:
             return None
-        timestamp, port, qlen = match.groups()
-        return (timestamp, port, qlen)
+        timestamp, port, synbl, acceptq = match.groups()
+        return (timestamp, port, synbl, acceptq)
 
 
 if __name__ == "__main__":
@@ -34,4 +34,4 @@ if __name__ == "__main__":
             type=str, help="Path to CSV file (output)")
     args = parser.parse_args()
     with open(args.log_filepath) as logfile:
-        TcpacceptqParser.df(logfile).to_csv(args.csv_filepath, index=False)
+        TcplistenParser.df(logfile).to_csv(args.csv_filepath, index=False)

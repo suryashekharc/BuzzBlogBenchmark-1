@@ -295,15 +295,10 @@ node-4:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -380,15 +375,10 @@ node-5:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -465,15 +455,10 @@ node-6:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -550,15 +535,10 @@ node-7:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -639,15 +619,10 @@ node-8:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -724,15 +699,10 @@ node-9:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -810,15 +780,10 @@ node-10:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -896,15 +861,10 @@ node-11:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -985,15 +945,10 @@ node-12:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1070,15 +1025,10 @@ node-13:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1158,15 +1108,10 @@ node-14:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1243,15 +1188,10 @@ node-15:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1330,15 +1270,10 @@ node-16:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1419,15 +1354,10 @@ node-17:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"
@@ -1503,15 +1433,10 @@ node-18:
       dirpath: "/tmp/runqlen-bpftrace"
       log: "/tmp/runqlen-bpftrace/log"
       niceness: 19
-    tcpsynbl-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpsynbl.bt 1"
-      dirpath: "/tmp/tcpsynbl-bpftrace"
-      log: "/tmp/tcpsynbl-bpftrace/log"
-      niceness: 19
-    tcpacceptq-bpftrace:
-      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpacceptq.bt 1"
-      dirpath: "/tmp/tcpacceptq-bpftrace"
-      log: "/tmp/tcpacceptq-bpftrace/log"
+    tcplisten-bpftrace:
+      command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcplisten.bt 1"
+      dirpath: "/tmp/tcplisten-bpftrace"
+      log: "/tmp/tcplisten-bpftrace/log"
       niceness: 19
     tcpretrans-bpftrace:
       command: "bpftrace /opt/BuzzBlogBenchmark/bpftrace/tcpretrans.bt"

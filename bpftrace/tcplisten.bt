@@ -1,0 +1,39 @@
+/*
+ * tcplisten - Monitor length of SYN backlog and accept queue of TCP listening sockets.
+ *
+ * Positional parameters:
+ *  $1: Sampling rate.
+ *
+ * Copyright (C) 2020 Georgia Tech Center for Experimental Research in Computer
+ * Systems
+ *
+ * Author: Rodrigo Alves Lima
+ */
+
+#ifndef BPFTRACE_HAVE_BTF
+#include <net/inet_connection_sock.h>
+#include <net/inet_sock.h>
+#include <net/sock.h>
+#endif
+
+BEGIN {
+  printf("%-26s %-5s %-5s %-7s\n", "TIME", "PORT", "SYNBL", "ACCEPTQ");
+}
+
+/* Trace addition to the TCP SYN backlog. */
+kprobe:inet_csk_reqsk_queue_hash_add {
+  if (nsecs % ((uint64) $1) == 0) {
+    $sk = (struct sock *) arg0;
+    printf("%-26s %-5d %-5d %-7d\n", strftime("%Y-%m-%d-%H:%M:%S.%f", nsecs), $sk->__sk_common.skc_num,
+        ((struct inet_connection_sock *) $sk)->icsk_accept_queue.qlen.counter + 1, $sk->sk_ack_backlog);
+  }
+}
+
+/* Trace arrival of TCP ACK packet. */
+kprobe:tcp_v4_syn_recv_sock {
+  if (nsecs % ((uint64) $1) == 0) {
+    $sk = (struct sock *) arg0;
+    printf("%-26s %-5d %-5d %-7d\n", strftime("%Y-%m-%d-%H:%M:%S.%f", nsecs), $sk->__sk_common.skc_num,
+        ((struct inet_connection_sock *) $sk)->icsk_accept_queue.qlen.counter, $sk->sk_ack_backlog + 1);
+  }
+}

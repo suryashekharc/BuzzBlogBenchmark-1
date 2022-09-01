@@ -393,11 +393,8 @@ def fetch_monitoring_data(node_hostname, node_conf, ssh_client):
       if monitor_name == "runqlen-bpftrace":
         ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/runqlen_parser.py "
             "--log_filepath {dirpath}/log --csv_filepath {dirpath}/log.csv".format(dirpath=monitor_conf["dirpath"]))
-      if monitor_name == "tcpsynbl-bpftrace":
-        ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/tcpsynbl_parser.py "
-            "--log_filepath {dirpath}/log --csv_filepath {dirpath}/log.csv".format(dirpath=monitor_conf["dirpath"]))
-      if monitor_name == "tcpacceptq-bpftrace":
-        ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/tcpacceptq_parser.py "
+      if monitor_name == "tcplisten-bpftrace":
+        ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/tcplisten_parser.py "
             "--log_filepath {dirpath}/log --csv_filepath {dirpath}/log.csv".format(dirpath=monitor_conf["dirpath"]))
       if monitor_name == "tcpretrans-bpftrace":
         ssh_client.exec("python3 /opt/BuzzBlogBenchmark/analysis/parsers/tcpretrans_parser.py "
