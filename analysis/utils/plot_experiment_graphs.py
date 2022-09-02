@@ -791,6 +791,7 @@ class RunQueueLengthLogAnalysis(LogAnalysis):
       if df.empty:
         continue
       df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
+      df = df.sum(axis=1)
       # Plot
       ax = fig.add_subplot(len(node_names or self._node_names), 1, i + 1)
       ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
@@ -800,7 +801,7 @@ class RunQueueLengthLogAnalysis(LogAnalysis):
       ax.set_ylim((0, df.values.max()))
       df.interpolate(method='linear').plot(ax=ax, kind="line",
           title="%s: %s - CPU Run Queue Length" % (node_name, self._node_labels[node_name]),
-          xlabel="Time (millisec)" if not short else "", ylabel="Count (Tasks)", grid=True)
+          xlabel="Time (millisec)" if not short else "", ylabel="Count (Tasks)", color="black", grid=True)
     return fig
 
 
