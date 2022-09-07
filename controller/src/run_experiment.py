@@ -30,8 +30,10 @@ METADATA = None
 LOG_FILENAME_TO_PARSER = {
   "loadgen([0-9]+)?.log": "/opt/BuzzBlogBenchmark/analysis/parsers/loadgen_parser.py",
   "queries.log": "/opt/BuzzBlogBenchmark/analysis/parsers/query_parser.py",
+  "queries_conn.log": "/opt/BuzzBlogBenchmark/analysis/parsers/query_conn_parser.py",
   "redis.log": "/opt/BuzzBlogBenchmark/analysis/parsers/redis_parser.py",
   "calls(_[0-9]+)?.log": "/opt/BuzzBlogBenchmark/analysis/parsers/rpc_parser.py",
+  "calls_conn(_[0-9]+)?.log": "/opt/BuzzBlogBenchmark/analysis/parsers/rpc_conn_parser.py",
 }
 
 
