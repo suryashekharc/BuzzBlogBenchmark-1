@@ -202,7 +202,7 @@ def save_system_specs(node_hostname, node_conf, ssh_client):
 
 @nodes_with_container(".+")
 def install_buzzblogbenchmark(node_hostname, node_conf, ssh_client):
-  VERSION = "1.9"
+  VERSION = "1.10"
   ssh_client.exec(
       "sudo mkdir -p /opt/BuzzBlogBenchmark && "
       "sudo curl "
