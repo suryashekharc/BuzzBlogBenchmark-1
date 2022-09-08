@@ -805,10 +805,10 @@ class RunQueueLengthLogAnalysis(LogAnalysis):
     return fig
 
 
-class TCPSynBacklogLogAnalysis(LogAnalysis):
+class TCPListenLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
     super().__init__(experiment_dirpath, output_dirpath)
-    self._bl = build_tcp_synbl_df(experiment_dirpath)
+    self._listen = build_tcp_listen_df(experiment_dirpath)
 
   @LogAnalysis.save_fig
   def plot_syn_backlog_length(self, interval=None, node_names=None, short=False):
@@ -822,8 +822,9 @@ class TCPSynBacklogLogAnalysis(LogAnalysis):
     fig = plt.figure(figsize=(24, len(node_names or self._node_names) * (12 if not short else 4)))
     for (i, node_name) in enumerate(node_names or self._node_names):
       # Data frame
-      df = self._bl[(self._bl["node_name"] == node_name) & (self._bl.index >= min_time) &
-          (self._bl.index <= max_time)].groupby(["window_%s" % window])["synbl"].max()
+      df = self._listen[(self._listen["node_name"] == node_name) &
+          (self._listen.index >= min_time) &
+          (self._listen.index <= max_time)].groupby(["window_%s" % window])["synbl"].max()
       if df.empty:
         continue
       # Plot
@@ -848,7 +849,7 @@ class TCPSynBacklogLogAnalysis(LogAnalysis):
       window = 10
       (min_time, max_time) = interval
     # Data frame
-    df = self._bl[(self._bl.index >= min_time) & (self._bl.index <= max_time)]
+    df = self._listen[(self._listen.index >= min_time) & (self._listen.index <= max_time)]
     df["node_label"] = df.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
     df = df.groupby(["window_%s" % window, "node_label"])["synbl"].max().unstack().fillna(0)
     if df.empty:
@@ -866,12 +867,6 @@ class TCPSynBacklogLogAnalysis(LogAnalysis):
         xlabel="Time (millisec)", ylabel="Count (Requests)", grid=True)
     return fig
 
-
-class TCPAcceptQueueLogAnalysis(LogAnalysis):
-  def __init__(self, experiment_dirpath, output_dirpath=None):
-    super().__init__(experiment_dirpath, output_dirpath)
-    self._queue = build_tcp_acceptq_df(experiment_dirpath)
-
   @LogAnalysis.save_fig
   def plot_accept_queue_length(self, interval=None, node_names=None, short=False):
     if not interval:
@@ -884,8 +879,9 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
     fig = plt.figure(figsize=(24, len(node_names or self._node_names) * (12 if not short else 4)))
     for (i, node_name) in enumerate(node_names or self._node_names):
       # Data frame
-      df = self._queue[(self._queue["node_name"] == node_name) & (self._queue.index >= min_time) &
-          (self._queue.index <= max_time)].groupby(["window_%s" % window])["qlen"].max()
+      df = self._listen[(self._listen["node_name"] == node_name) &
+          (self._listen.index >= min_time) & (self._listen.index <= max_time)].\
+          groupby(["window_%s" % window])["acceptq"].max()
       if df.empty:
         continue
       # Plot
@@ -910,9 +906,9 @@ class TCPAcceptQueueLogAnalysis(LogAnalysis):
       window = 10
       (min_time, max_time) = interval
     # Data frame
-    df = self._queue[(self._queue.index >= min_time) & (self._queue.index <= max_time)]
+    df = self._listen[(self._listen.index >= min_time) & (self._listen.index <= max_time)]
     df["node_label"] = df.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
-    df = df.groupby(["window_%s" % window, "node_label"])["qlen"].max().unstack().fillna(0)
+    df = df.groupby(["window_%s" % window, "node_label"])["acceptq"].max().unstack().fillna(0)
     if df.empty:
       return None
     df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
@@ -993,7 +989,7 @@ def main():
     os.mkdir(output_dirpath)
     for notebook_cls in [RequestLogAnalysis, CollectlCPULogAnalysis, CollectlDskLogAnalysis, CollectlMemLogAnalysis,
         QueryLogAnalysis, RedisLogAnalysis, RPCLogAnalysis, ServerRequestLogAnalysis, RunQueueLengthLogAnalysis,
-        TCPSynBacklogLogAnalysis, TCPAcceptQueueLogAnalysis, TCPRetransLogAnalysis]:
+        TCPListenLogAnalysis, TCPRetransLogAnalysis]:
       try:
         notebook = notebook_cls(experiment_dirpath, output_dirpath)
         notebook.plot(distribution=args.distribution)

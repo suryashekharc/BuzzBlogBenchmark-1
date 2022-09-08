@@ -167,20 +167,8 @@ def get_runqlen_df(experiment_dirpath):
                 pd.read_csv(csvfile, parse_dates=["timestamp"]).assign(node_name=node_name))
 
 
-def get_tcpsynbl_df(experiment_dirpath):
-  tarball_name = "tcpsynbl-bpftrace.tar.gz"
-  for node_name in get_node_names(experiment_dirpath):
-    if tarball_name in os.listdir(os.path.join(experiment_dirpath, "logs", node_name)):
-      tarball_path = os.path.join(experiment_dirpath, "logs", node_name, tarball_name)
-      with tarfile.open(tarball_path, "r:gz") as tar:
-        if "./log.csv" in tar.getnames():
-          with tar.extractfile("./log.csv") as csvfile:
-            yield (node_name, tarball_name,
-                pd.read_csv(csvfile, parse_dates=["timestamp"]).assign(node_name=node_name))
-
-
-def get_tcpacceptq_df(experiment_dirpath):
-  tarball_name = "tcpacceptq-bpftrace.tar.gz"
+def get_tcplisten_df(experiment_dirpath):
+  tarball_name = "tcplisten-bpftrace.tar.gz"
   for node_name in get_node_names(experiment_dirpath):
     if tarball_name in os.listdir(os.path.join(experiment_dirpath, "logs", node_name)):
       tarball_path = os.path.join(experiment_dirpath, "logs", node_name, tarball_name)
@@ -365,34 +353,19 @@ def build_runqlen_df(experiment_dirpath):
   return queue
 
 
-def build_tcp_synbl_df(experiment_dirpath):
+def build_tcp_listen_df(experiment_dirpath):
   # Extract experiment information.
   start_time = get_experiment_start_time(experiment_dirpath) - pd.Timedelta(hours=6)
   # Build data frame.
-  bl = pd.concat([df[2] for df in get_tcpsynbl_df(experiment_dirpath)])
+  listen = pd.concat([df[2] for df in get_tcplisten_df(experiment_dirpath)])
   # (Re) Build columns.
-  bl["timestamp"] = bl.apply(lambda r: (r["timestamp"] - start_time).total_seconds(), axis=1)
-  bl["window_1000"] = bl["timestamp"].round(0).multiply(1000)
-  bl["window_10"] = bl["timestamp"].round(2).multiply(1000)
+  listen["timestamp"] = listen.apply(lambda r: (r["timestamp"] - start_time).total_seconds(), axis=1)
+  listen["window_1000"] = listen["timestamp"].round(0).multiply(1000)
+  listen["window_10"] = listen["timestamp"].round(2).multiply(1000)
   # (Re) Create index.
-  bl.set_index("timestamp", inplace=True)
-  bl.sort_index(inplace=True)
-  return bl
-
-
-def build_tcp_acceptq_df(experiment_dirpath):
-  # Extract experiment information.
-  start_time = get_experiment_start_time(experiment_dirpath) - pd.Timedelta(hours=6)
-  # Build data frame.
-  queue = pd.concat([df[2] for df in get_tcpacceptq_df(experiment_dirpath)])
-  # (Re) Build columns.
-  queue["timestamp"] = queue.apply(lambda r: (r["timestamp"] - start_time).total_seconds(), axis=1)
-  queue["window_1000"] = queue["timestamp"].round(0).multiply(1000)
-  queue["window_10"] = queue["timestamp"].round(2).multiply(1000)
-  # (Re) Create index.
-  queue.set_index("timestamp", inplace=True)
-  queue.sort_index(inplace=True)
-  return queue
+  listen.set_index("timestamp", inplace=True)
+  listen.sort_index(inplace=True)
+  return listen
 
 
 def build_tcp_retrans_df(experiment_dirpath):
