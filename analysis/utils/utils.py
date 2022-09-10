@@ -83,6 +83,18 @@ def get_rpc_df(experiment_dirpath):
                   pd.read_csv(csvfile, parse_dates=["timestamp"]).assign(node_name=node_name))
 
 
+def get_rpc_conn_df(experiment_dirpath):
+  for node_name in get_node_names(experiment_dirpath):
+    for tarball_name in os.listdir(os.path.join(experiment_dirpath, "logs", node_name)):
+      tarball_path = os.path.join(experiment_dirpath, "logs", node_name, tarball_name)
+      with tarfile.open(tarball_path, "r:gz") as tar:
+        for filename in tar.getnames():
+          if re.match(".*calls_conn(_[0-9]+)?.csv", filename):
+            with tar.extractfile(filename) as csvfile:
+              yield (node_name, tarball_name,
+                  pd.read_csv(csvfile, parse_dates=["timestamp"]).assign(node_name=node_name))
+
+
 def get_query_df(experiment_dirpath):
   for node_name in get_node_names(experiment_dirpath):
     for tarball_name in os.listdir(os.path.join(experiment_dirpath, "logs", node_name)):
@@ -286,6 +298,22 @@ def build_rpc_df(experiment_dirpath, exploded_window_in_ms=None):
   rpc.set_index("timestamp", inplace=True)
   rpc.sort_index(inplace=True)
   return rpc
+
+
+def build_rpc_conn_df(experiment_dirpath):
+  # Extract experiment information.
+  start_time = get_experiment_start_time(experiment_dirpath)
+  # Build data frame.
+  rpc_conn = pd.concat([df[2] for df in get_rpc_conn_df(experiment_dirpath)])
+  # (Re) Build columns.
+  rpc_conn["timestamp"] = rpc_conn.apply(lambda r: (r["timestamp"] - start_time).total_seconds(), axis=1)
+  rpc_conn["window_10"] = rpc_conn["timestamp"].round(2).multiply(1000)
+  rpc_conn["window_1000"] = rpc_conn["timestamp"].round(0).multiply(1000)
+  rpc_conn["latency"] = rpc_conn["latency"].multiply(1000)
+  # (Re) Create index
+  rpc_conn.set_index("timestamp", inplace=True)
+  rpc_conn.sort_index(inplace=True)
+  return rpc_conn
 
 
 def build_query_df(experiment_dirpath, exploded_window_in_ms=None):
