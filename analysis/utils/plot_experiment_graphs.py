@@ -303,45 +303,61 @@ class CollectlDskLogAnalysis(LogAnalysis):
     self._dsk = build_collectl_dsk_df(experiment_dirpath)
 
   @LogAnalysis.save_fig
-  def plot_averaged_dsk_metric(self, dsk_metric="writes"):
-    fig = plt.figure(figsize=(24, len(self._node_names) * 12))
-    for (i, node_name) in enumerate(sorted(self._node_names)):
+  def plot_dsk_metric(self, dsk_metric="writes", interval=None, node_names=None, short=False):
+    if not interval:
+      window = 1000
+      min_time = 0
+      max_time = self._total_duration
+    else:
+      window = None
+      (min_time, max_time) = interval
+    fig = plt.figure(figsize=(24, len(node_names or self._node_names) * (12 if not short else 4)))
+    for (i, node_name) in enumerate(node_names or sorted(self._node_names)):
       # Data frame
-      df = self._dsk[(self._dsk["node_name"] == node_name)].\
-          groupby(["window_1000", "hw_no"])[dsk_metric].mean().unstack()
+      df = self._dsk[(self._dsk["node_name"] == node_name) &
+          (self._dsk.index >= min_time) & (self._dsk.index <= max_time)].\
+          groupby(["timestamp" if not window else ("window_%s" % window), "hw_no"])[dsk_metric].mean().unstack()
       if df.empty:
         continue
       # Plot
-      ax = fig.add_subplot(len(self._node_names), 1, i + 1)
-      ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
-      ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
-      ax.set_xlim((0, df.index.max()))
+      ax = fig.add_subplot(len(node_names or self._node_names), 1, i + 1)
+      ax.axvline(x=self._ramp_up_duration if not window else (self._ramp_up_duration * 1000), ls="--", color="green")
+      ax.axvline(x=(self._total_duration - self._ramp_down_duration) if not window else
+          ((self._total_duration - self._ramp_down_duration) * 1000), ls="--", color="green")
+      ax.set_xlim((df.index.min(), df.index.max()))
       ax.grid(alpha=0.75)
-      df.plot(ax=ax, kind="line", title="%s: %s - Disk Utilization" % (node_name, self._node_labels[node_name]),
-          xlabel="Time (millisec)", ylabel=dsk_metric, grid=True, legend=False)
+      df.interpolate(method='linear').plot(ax=ax, kind="line",
+          title="%s: %s - Disk I/O Utilization" % (node_name, self._node_labels[node_name]),
+          xlabel=("Time (%s)" % ("sec" if not window else "millisec")) if not short else "",
+          ylabel=dsk_metric, grid=True, legend=False)
     return fig
 
   @LogAnalysis.save_fig
-  def plot_dsk_metric(self, dsk_metric="writes", interval=None):
+  def plot_dsk_metric_comparison(self, dsk_metric="writes", interval=None):
     if not interval:
-      return None
+      window = 1000
+      min_time = 0
+      max_time = self._total_duration
     else:
+      window = None
       (min_time, max_time) = interval
-    fig = plt.figure(figsize=(24, len(self._node_names) * 12))
-    for (i, node_name) in enumerate(sorted(self._node_names)):
-      # Data frame
-      df = self._dsk[(self._dsk["node_name"] == node_name) & (self._dsk.index >= min_time) &
-          (self._dsk.index <= max_time)].groupby(["timestamp"])[dsk_metric].mean()
-      if df.empty:
-        continue
-      # Plot
-      ax = fig.add_subplot(len(self._node_names), 1, i + 1)
-      ax.axvline(x=self._ramp_up_duration, ls="--", color="green")
-      ax.axvline(x=self._total_duration - self._ramp_down_duration, ls="--", color="green")
-      ax.set_xlim((df.index.min(), df.index.max()))
-      ax.grid(alpha=0.75)
-      df.plot(ax=ax, kind="line", title="%s: %s - Disk Utilization" % (node_name, self._node_labels[node_name]),
-          xlabel="Time (sec)", ylabel=dsk_metric, grid=True, legend=False)
+    # Data frame
+    dsk = self._dsk[(self._dsk.index >= min_time) & (self._dsk.index <= max_time)]
+    dsk["node_label"] = dsk.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
+    df = dsk.groupby(["timestamp" if not window else ("window_%s" % window), "node_label"])[dsk_metric].mean().unstack()
+    if df.empty:
+      return None
+    # Plot
+    fig = plt.figure(figsize=(24, 12))
+    ax = fig.gca()
+    ax.axvline(x=self._ramp_up_duration if not window else (self._ramp_up_duration * 1000), ls="--", color="green")
+    ax.axvline(x=(self._total_duration - self._ramp_down_duration) if not window else
+        ((self._total_duration - self._ramp_down_duration) * 1000), ls="--", color="green")
+    ax.set_xlim((df.index.min(), df.index.max()))
+    ax.grid(alpha=0.75)
+    df.interpolate(method='linear').plot(ax=ax, kind="line", title="Disk I/O Utilization",
+        xlabel="Time (%s)" % ("sec" if not window else "millisec"),
+        ylabel=dsk_metric, grid=True)
     return fig
 
 
@@ -351,45 +367,61 @@ class CollectlMemLogAnalysis(LogAnalysis):
     self._mem = build_collectl_mem_df(experiment_dirpath)
 
   @LogAnalysis.save_fig
-  def plot_averaged_mem_metric(self, mem_metric="free"):
-    fig = plt.figure(figsize=(24, len(self._node_names) * 12))
-    for (i, node_name) in enumerate(sorted(self._node_names)):
+  def plot_mem_metric(self, mem_metric="free", interval=None, node_names=None, short=False):
+    if not interval:
+      window = 1000
+      min_time = 0
+      max_time = self._total_duration
+    else:
+      window = None
+      (min_time, max_time) = interval
+    fig = plt.figure(figsize=(24, len(node_names or self._node_names) * (12 if not short else 4)))
+    for (i, node_name) in enumerate(node_names or sorted(self._node_names)):
       # Data frame
-      df = self._mem[(self._mem["node_name"] == node_name)].\
-          groupby(["window_1000", "hw_no"])[mem_metric].mean().unstack()
+      df = self._mem[(self._mem["node_name"] == node_name) & (self._mem.index >= min_time) &
+          (self._mem.index <= max_time)].\
+          groupby(["timestamp" if not window else ("window_%s" % window)])[mem_metric].mean()
       if df.empty:
         continue
       # Plot
-      ax = fig.add_subplot(len(self._node_names), 1, i + 1)
-      ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
-      ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
-      ax.set_xlim((0, df.index.max()))
+      ax = fig.add_subplot(len(node_names or self._node_names), 1, i + 1)
+      ax.axvline(x=self._ramp_up_duration if not window else (self._ramp_up_duration * 1000), ls="--", color="green")
+      ax.axvline(x=(self._total_duration - self._ramp_down_duration) if not window else
+          ((self._total_duration - self._ramp_down_duration) * 1000), ls="--", color="green")
+      ax.set_xlim((df.index.min(), df.index.max()))
       ax.grid(alpha=0.75)
-      df.plot(ax=ax, kind="line", title="%s: %s - Memory Utilization" % (node_name, self._node_labels[node_name]),
-          xlabel="Time (millisec)", ylabel=mem_metric, grid=True, legend=False)
+      df.interpolate(method='linear').plot(ax=ax, kind="line",
+          title="%s: %s - Memory Utilization" % (node_name, self._node_labels[node_name]),
+          xlabel=("Time (%s)" % ("sec" if not window else "millisec")) if not short else "",
+          ylabel=mem_metric, grid=True, legend=False)
     return fig
 
   @LogAnalysis.save_fig
-  def plot_mem_metric(self, mem_metric="free", interval=None):
+  def plot_mem_metric_comparison(self, mem_metric="free", interval=None):
     if not interval:
-      return None
+      window = 1000
+      min_time = 0
+      max_time = self._total_duration
     else:
+      window = None
       (min_time, max_time) = interval
-    fig = plt.figure(figsize=(24, len(self._node_names) * 12))
-    for (i, node_name) in enumerate(sorted(self._node_names)):
-      # Data frame
-      df = self._mem[(self._mem["node_name"] == node_name) & (self._mem.index >= min_time) &
-          (self._mem.index <= max_time)].groupby(["timestamp"])[mem_metric].mean()
-      if df.empty:
-        continue
-      # Plot
-      ax = fig.add_subplot(len(self._node_names), 1, i + 1)
-      ax.axvline(x=self._ramp_up_duration, ls="--", color="green")
-      ax.axvline(x=self._total_duration - self._ramp_down_duration, ls="--", color="green")
-      ax.set_xlim((df.index.min(), df.index.max()))
-      ax.grid(alpha=0.75)
-      df.plot(ax=ax, kind="line", title="%s: %s - Memory Utilization" % (node_name, self._node_labels[node_name]),
-          xlabel="Time (sec)", ylabel=mem_metric, grid=True, legend=False)
+    # Data frame
+    mem = self._mem[(self._mem.index >= min_time) & (self._mem.index <= max_time)]
+    mem["node_label"] = mem.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
+    df = mem.groupby(["timestamp" if not window else ("window_%s" % window), "node_label"])[mem_metric].mean().unstack()
+    if df.empty:
+      return None
+    # Plot
+    fig = plt.figure(figsize=(24, 12))
+    ax = fig.gca()
+    ax.axvline(x=self._ramp_up_duration if not window else (self._ramp_up_duration * 1000), ls="--", color="green")
+    ax.axvline(x=(self._total_duration - self._ramp_down_duration) if not window else
+        ((self._total_duration - self._ramp_down_duration) * 1000), ls="--", color="green")
+    ax.set_xlim((df.index.min(), df.index.max()))
+    ax.grid(alpha=0.75)
+    df.interpolate(method='linear').plot(ax=ax, kind="line", title="Memory Utilization",
+        xlabel="Time (%s)" % ("sec" if not window else "millisec"),
+        ylabel=mem_metric, grid=True)
     return fig
 
 
