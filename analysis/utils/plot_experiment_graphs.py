@@ -8,7 +8,6 @@ This script generates image files with system performance graphs.
 
 import argparse
 import os
-import pprint
 import re
 import sys
 import warnings
