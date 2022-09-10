@@ -623,7 +623,7 @@ class RPCLogAnalysis(LogAnalysis):
     self._rpc = build_rpc_df(experiment_dirpath, exploded_window_in_ms=None)
     self._rpc_conn = build_rpc_conn_df(experiment_dirpath)
     self._function_names = sorted(self._rpc["function"].unique())
-    self._service_names = sorted([fn.split(':')[0] for fn in self._function_names])
+    self._service_names = sorted(set([fn.split(':')[0] for fn in self._function_names]))
 
   @LogAnalysis.save_fig
   def plot_instantaneous_latency_of_rpcs(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
