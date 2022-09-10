@@ -486,7 +486,7 @@ class QueryLogAnalysis(LogAnalysis):
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.set_ylim((0, np.nanmax(df)))
     df.interpolate(method='linear').plot(ax=ax, kind="line",
-        title="Instantaneous %s Latency of Queries" % latency_percentile, xlabel="Time (millisec)",
+        title="Instantaneous P%s Latency of Queries" % int(latency_percentile * 100), xlabel="Time (millisec)",
         ylabel="Latency (millisec)", grid=True)
     return fig
 
@@ -543,7 +543,7 @@ class QueryLogAnalysis(LogAnalysis):
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.set_ylim((0, np.nanmax(df)))
     df.interpolate(method='linear').plot(ax=ax, kind="line",
-        title="Instantaneous %s Connection Latency" % latency_percentile, xlabel="Time (millisec)",
+        title="Instantaneous P%s Connection Latency" % int(latency_percentile * 100), xlabel="Time (millisec)",
         ylabel="Latency (millisec)", grid=True)
     return fig
 
@@ -709,7 +709,7 @@ class RPCLogAnalysis(LogAnalysis):
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.set_ylim((0, np.nanmax(df)))
     df.interpolate(method='linear').plot(ax=ax, kind="line",
-        title="Instantaneous %s Latency of RPC" % latency_percentile, xlabel="Time (millisec)",
+        title="Instantaneous P%s Latency of RPC" % int(latency_percentile * 100), xlabel="Time (millisec)",
         ylabel="Latency (millisec)", grid=True)
     return fig
 
@@ -766,7 +766,7 @@ class RPCLogAnalysis(LogAnalysis):
     ax.set_xlim((min_time * 1000, max_time * 1000))
     ax.set_ylim((0, np.nanmax(df)))
     df.interpolate(method='linear').plot(ax=ax, kind="line",
-        title="Instantaneous %s Connection Latency" % latency_percentile, xlabel="Time (millisec)",
+        title="Instantaneous P%s Connection Latency" % int(latency_percentile * 100), xlabel="Time (millisec)",
         ylabel="Latency (millisec)", grid=True)
     return fig
 
