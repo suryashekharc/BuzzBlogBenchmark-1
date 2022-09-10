@@ -547,23 +547,6 @@ class QueryLogAnalysis(LogAnalysis):
         ylabel="Latency (millisec)", grid=True)
     return fig
 
-  def calculate_stats(self):
-    stats = {}
-    for dbname in self._dbnames:
-      query = self._query[(self._query["dbname"] == dbname) &
-          (self._query.index >= self._ramp_up_duration) &
-          (self._query.index <= self._total_duration - self._ramp_down_duration)]
-      stats.update({
-          "db_%s_latency_p50" % dbname: query["latency"].quantile(0.50),
-          "db_%s_latency_p95" % dbname: query["latency"].quantile(0.95),
-          "db_%s_latency_p99" % dbname: query["latency"].quantile(0.99),
-          "db_%s_latency_p999" % dbname: query["latency"].quantile(0.999),
-          "db_%s_latency_avg" % dbname: query["latency"].mean(),
-          "db_%s_latency_std" % dbname: query["latency"].std(),
-          "db_%s_latency_max" % dbname: query["latency"].max(),
-      })
-    return stats
-
 
 class RedisLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
@@ -599,23 +582,6 @@ class RedisLogAnalysis(LogAnalysis):
       df.plot(ax=ax, kind="line", title="Instantaneous Latency of Commands - %s" % service, xlabel="Time (millisec)",
           ylabel="Latency (millisec)", grid=True)
     return fig
-
-  def calculate_stats(self):
-    stats = {}
-    for service in self._services:
-      redis = self._redis[(self._redis["service_name"] == service) &
-          (self._redis.index >= self._ramp_up_duration) &
-          (self._redis.index <= self._total_duration - self._ramp_down_duration)]
-      stats.update({
-          "redis_%s_latency_p50" % service: redis["latency"].quantile(0.50),
-          "redis_%s_latency_p95" % service: redis["latency"].quantile(0.95),
-          "redis_%s_latency_p99" % service: redis["latency"].quantile(0.99),
-          "redis_%s_latency_p999" % service: redis["latency"].quantile(0.999),
-          "redis_%s_latency_avg" % service: redis["latency"].mean(),
-          "redis_%s_latency_std" % service: redis["latency"].std(),
-          "redis_%s_latency_max" % service: redis["latency"].max(),
-      })
-    return stats
 
 
 class RPCLogAnalysis(LogAnalysis):
@@ -769,34 +735,6 @@ class RPCLogAnalysis(LogAnalysis):
         title="Instantaneous P%s Connection Latency" % int(latency_percentile * 100), xlabel="Time (millisec)",
         ylabel="Latency (millisec)", grid=True)
     return fig
-
-  def calculate_stats(self):
-    stats = {}
-    for function in self._function_names:
-      rpc = self._rpc[(self._rpc["function"] == function) &
-          (self._rpc.index >= self._ramp_up_duration) &
-          (self._rpc.index <= self._total_duration - self._ramp_down_duration)]
-      if rpc.empty:
-        stats.update({
-            "rpc_%s_latency_p50" % function: 0,
-            "rpc_%s_latency_p95" % function: 0,
-            "rpc_%s_latency_p99" % function: 0,
-            "rpc_%s_latency_p999" % function: 0,
-            "rpc_%s_latency_avg" % function: 0,
-            "rpc_%s_latency_std" % function: 0,
-            "rpc_%s_latency_max" % function: 0,
-        })
-      else:
-        stats.update({
-            "rpc_%s_latency_p50" % function: rpc["latency"].quantile(0.50),
-            "rpc_%s_latency_p95" % function: rpc["latency"].quantile(0.95),
-            "rpc_%s_latency_p99" % function: rpc["latency"].quantile(0.99),
-            "rpc_%s_latency_p999" % function: rpc["latency"].quantile(0.999),
-            "rpc_%s_latency_avg" % function: rpc["latency"].mean(),
-            "rpc_%s_latency_std" % function: rpc["latency"].std(),
-            "rpc_%s_latency_max" % function: rpc["latency"].max(),
-        })
-    return stats
 
 
 class ServerRequestLogAnalysis(LogAnalysis):
