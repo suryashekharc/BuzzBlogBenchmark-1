@@ -353,6 +353,7 @@ class CollectlDskLogAnalysis(LogAnalysis):
     ax.axvline(x=(self._total_duration - self._ramp_down_duration) if not window else
         ((self._total_duration - self._ramp_down_duration) * 1000), ls="--", color="green")
     ax.set_xlim((df.index.min(), df.index.max()))
+    ax.set_ylim((0, np.nanmax(df)))
     ax.grid(alpha=0.75)
     df.interpolate(method='linear').plot(ax=ax, kind="line", title="Disk I/O Utilization",
         xlabel="Time (%s)" % ("sec" if not window else "millisec"),
@@ -417,6 +418,7 @@ class CollectlMemLogAnalysis(LogAnalysis):
     ax.axvline(x=(self._total_duration - self._ramp_down_duration) if not window else
         ((self._total_duration - self._ramp_down_duration) * 1000), ls="--", color="green")
     ax.set_xlim((df.index.min(), df.index.max()))
+    ax.set_ylim((0, np.nanmax(df)))
     ax.grid(alpha=0.75)
     df.interpolate(method='linear').plot(ax=ax, kind="line", title="Memory Utilization",
         xlabel="Time (%s)" % ("sec" if not window else "millisec"),
