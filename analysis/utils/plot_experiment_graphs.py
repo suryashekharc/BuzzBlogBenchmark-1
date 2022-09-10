@@ -499,7 +499,7 @@ class QueryLogAnalysis(LogAnalysis):
       window = 10
       (min_time, max_time) = interval
     fig = plt.figure(figsize=(24, len(self._dbnames) * 12))
-    for (i, dbname) in enumerate(self._dbnames):
+    for (i, dbname) in enumerate([dbname[:-1].lower() for dbname in self._dbnames]):
       # Data frame
       df = self._query_conn[(self._query_conn["dbname"] == dbname) & (self._query_conn.index >= min_time) &
           (self._query_conn.index <= max_time)].groupby(["window_%s" % window])["latency"].\
