@@ -429,6 +429,7 @@ class QueryLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
     super().__init__(experiment_dirpath, output_dirpath)
     self._query = build_query_df(experiment_dirpath, exploded_window_in_ms=None)
+    self._query_conn = build_query_conn_df(experiment_dirpath)
     self._dbnames = sorted(self._query["dbname"].unique())
 
   @LogAnalysis.save_fig
@@ -485,6 +486,63 @@ class QueryLogAnalysis(LogAnalysis):
     ax.set_ylim((0, np.nanmax(df)))
     df.interpolate(method='linear').plot(ax=ax, kind="line",
         title="Instantaneous %s Latency of Queries" % latency_percentile, xlabel="Time (millisec)",
+        ylabel="Latency (millisec)", grid=True)
+    return fig
+
+  @LogAnalysis.save_fig
+  def plot_instantaneous_connection_latency(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
+    if not interval:
+      window = 1000
+      min_time = 0
+      max_time = self._total_duration
+    else:
+      window = 10
+      (min_time, max_time) = interval
+    fig = plt.figure(figsize=(24, len(self._dbnames) * 12))
+    for (i, dbname) in enumerate(self._dbnames):
+      # Data frame
+      df = self._query_conn[(self._query_conn["dbname"] == dbname) & (self._query_conn.index >= min_time) &
+          (self._query_conn.index <= max_time)].groupby(["window_%s" % window])["latency"].\
+          quantile(latency_percentiles).unstack()
+      if df.empty:
+        continue
+      df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
+      # Plot
+      ax = fig.add_subplot(len(self._dbnames), 1, i + 1)
+      ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
+      ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
+      ax.grid(alpha=0.75)
+      ax.set_xlim((min_time * 1000, max_time * 1000))
+      ax.set_ylim((0, df.values.max()))
+      df.plot(ax=ax, kind="line", title="Instantaneous Connection Latency - %s" % dbname, xlabel="Time (millisec)",
+          ylabel="Latency (millisec)", grid=True)
+    return fig
+
+  @LogAnalysis.save_fig
+  def plot_instantaneous_connection_latency_comparison(self, latency_percentile=0.99, interval=None):
+    if not interval:
+      window = 1000
+      min_time = 0
+      max_time = self._total_duration
+    else:
+      window = 10
+      (min_time, max_time) = interval
+    # Data frame
+    df = self._query_conn[(self._query_conn.index >= min_time) & (self._query_conn.index <= max_time)]
+    df = df.groupby(["window_%s" % window, "dbname"])["latency"].quantile(latency_percentile).unstack()
+    if df.empty:
+      return None
+    df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window))
+    # Plot
+    fig = plt.figure(figsize=(24, 12))
+    ax = fig.gca()
+    ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
+    ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
+    ax.grid(alpha=0.75)
+    ax.set_xlim((min_time * 1000, max_time * 1000))
+    ax.set_ylim((0, np.nanmax(df)))
+    df.interpolate(method='linear').plot(ax=ax, kind="line",
+        title="Instantaneous %s Connection Latency" % latency_percentile, xlabel="Time (millisec)",
         ylabel="Latency (millisec)", grid=True)
     return fig
 

@@ -95,6 +95,18 @@ def get_query_df(experiment_dirpath):
                   pd.read_csv(csvfile, parse_dates=["timestamp"]).assign(node_name=node_name))
 
 
+def get_query_conn_df(experiment_dirpath):
+  for node_name in get_node_names(experiment_dirpath):
+    for tarball_name in os.listdir(os.path.join(experiment_dirpath, "logs", node_name)):
+      tarball_path = os.path.join(experiment_dirpath, "logs", node_name, tarball_name)
+      with tarfile.open(tarball_path, "r:gz") as tar:
+        for filename in tar.getnames():
+          if filename.endswith("queries_conn.csv"):
+            with tar.extractfile(filename) as csvfile:
+              yield (node_name, tarball_name,
+                  pd.read_csv(csvfile, parse_dates=["timestamp"]).assign(node_name=node_name))
+
+
 def get_redis_df(experiment_dirpath):
   for node_name in get_node_names(experiment_dirpath):
     for tarball_name in os.listdir(os.path.join(experiment_dirpath, "logs", node_name)):
@@ -294,6 +306,22 @@ def build_query_df(experiment_dirpath, exploded_window_in_ms=None):
   query.set_index("timestamp", inplace=True)
   query.sort_index(inplace=True)
   return query
+
+
+def build_query_conn_df(experiment_dirpath):
+  # Extract experiment information.
+  start_time = get_experiment_start_time(experiment_dirpath)
+  # Build data frame.
+  query_conn = pd.concat([df[2] for df in get_query_conn_df(experiment_dirpath)])
+  # (Re) Build columns.
+  query_conn["timestamp"] = query_conn.apply(lambda r: (r["timestamp"] - start_time).total_seconds(), axis=1)
+  query_conn["window_10"] = query_conn["timestamp"].round(2).multiply(1000)
+  query_conn["window_1000"] = query_conn["timestamp"].round(0).multiply(1000)
+  query_conn["latency"] = query_conn["latency"].multiply(1000)
+  # (Re) Create index.
+  query_conn.set_index("timestamp", inplace=True)
+  query_conn.sort_index(inplace=True)
+  return query_conn
 
 
 def build_collectl_cpu_df(experiment_dirpath):
