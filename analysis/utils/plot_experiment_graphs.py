@@ -898,35 +898,6 @@ class RunQueueLengthLogAnalysis(LogAnalysis):
           xlabel="Time (millisec)" if not short else "", ylabel="Count (Tasks)", color="black", grid=True)
     return fig
 
-  @LogAnalysis.save_fig
-  def plot_run_queue_length_comparison(self, interval=None):
-    if not interval:
-      window = 1000
-      min_time = 0
-      max_time = self._total_duration
-    else:
-      window = 10
-      (min_time, max_time) = interval
-    # Data frame
-    df = self._queue[(self._queue.index >= min_time) & (self._queue.index <= max_time)]
-    df["node_label"] = df.apply(lambda r: self._node_labels[r["node_name"]], axis=1)
-    df = df.groupby(["node_label", "window_%s" % window, "cpu"])["qlen"].mean().unstack().fillna(0)
-    if df.empty:
-      return None
-    df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
-    df = df.sum(axis=1)
-    # Plot
-    fig = plt.figure(figsize=(24, 12))
-    ax = fig.gca()
-    ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
-    ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
-    ax.grid(alpha=0.75)
-    ax.set_xlim((min_time * 1000, max_time * 1000))
-    ax.set_ylim((0, np.nanmax(df)))
-    df.interpolate(method='linear').plot(ax=ax, kind="line", title="CPU Run Queue Length",
-        xlabel="Time (millisec)", ylabel="Count (Tasks)", grid=True)
-    return fig
-
 
 class TCPListenLogAnalysis(LogAnalysis):
   def __init__(self, experiment_dirpath, output_dirpath=None):
