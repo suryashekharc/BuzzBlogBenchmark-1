@@ -139,7 +139,8 @@ class RequestLogAnalysis(LogAnalysis):
     return fig
 
   @LogAnalysis.save_fig
-  def plot_instantaneous_latency_of_requests(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
+  def plot_instantaneous_latency_of_requests(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None,
+      request_type=None):
     if not interval:
       window = 1000
       min_time = 0
@@ -149,8 +150,10 @@ class RequestLogAnalysis(LogAnalysis):
       (min_time, max_time) = interval
     # Data frame
     df = self._requests[(self._requests["status"] == "successful") & (self._requests.index >= min_time) &
-        (self._requests.index <= max_time)].groupby(["window_%s" % window])["latency"].quantile(latency_percentiles).\
-        unstack()
+        (self._requests.index <= max_time)]
+    if request_type is not None:
+      df = df[(df["type"] == request_type)]
+    df = df.groupby(["window_%s" % window])["latency"].quantile(latency_percentiles).unstack()
     if df.empty:
       return None
     df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
@@ -162,8 +165,9 @@ class RequestLogAnalysis(LogAnalysis):
     ax.set_ylim((0, df.values.max()))
     ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
     ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
-    df.plot(ax=ax, kind="line", title="Instantaneous Latency of Requests", xlabel="Time (millisec)",
-        ylabel="Latency (millisec)", grid=True)
+    df.plot(ax=ax, kind="line", title="Instantaneous Latency of Requests" +
+        ("" if not request_type else (" - %s" % request_type)),
+        xlabel="Time (millisec)", ylabel="Latency (millisec)", grid=True)
     return fig
 
   @LogAnalysis.save_fig
