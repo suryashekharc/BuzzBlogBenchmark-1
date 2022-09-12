@@ -593,7 +593,8 @@ class RPCLogAnalysis(LogAnalysis):
     self._service_names = sorted(set([fn.split(':')[0] for fn in self._function_names]))
 
   @LogAnalysis.save_fig
-  def plot_instantaneous_latency_of_rpcs(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
+  def plot_instantaneous_latency_of_rpcs(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None,
+      functions=None, short=False):
     if not interval:
       window = 1000
       min_time = 0
@@ -601,8 +602,8 @@ class RPCLogAnalysis(LogAnalysis):
     else:
       window = 10
       (min_time, max_time) = interval
-    fig = plt.figure(figsize=(24, len(self._function_names) * 12))
-    for (i, function) in enumerate(self._function_names):
+    fig = plt.figure(figsize=(24, len(functions or self._function_names) * (12 if not short else 4)))
+    for (i, function) in enumerate(functions or self._function_names):
       # Data frame
       df = self._rpc[(self._rpc["function"] == function) & (self._rpc.index >= min_time) &
           (self._rpc.index <= max_time)].groupby(["window_%s" % window])["latency"].quantile(latency_percentiles).\
@@ -611,14 +612,14 @@ class RPCLogAnalysis(LogAnalysis):
         continue
       df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
       # Plot
-      ax = fig.add_subplot(len(self._function_names), 1, i + 1)
+      ax = fig.add_subplot(len(functions or self._function_names), 1, i + 1)
       ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
       ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
       ax.grid(alpha=0.75)
       ax.set_xlim((min_time * 1000, max_time * 1000))
       ax.set_ylim((0, df.values.max()))
-      df.plot(ax=ax, kind="line", title="Instantaneous Latency of RPC - %s" % function, xlabel="Time (millisec)",
-          ylabel="Latency (millisec)", grid=True)
+      df.interpolate(method='linear').plot(ax=ax, kind="line", title="Instantaneous Latency of RPC - %s" % function,
+          xlabel="Time (millisec)" if not short else "", ylabel="Latency (millisec)", grid=True)
     return fig
 
   @LogAnalysis.save_fig
