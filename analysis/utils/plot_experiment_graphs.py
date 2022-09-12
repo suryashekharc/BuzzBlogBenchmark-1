@@ -492,7 +492,8 @@ class QueryLogAnalysis(LogAnalysis):
     return fig
 
   @LogAnalysis.save_fig
-  def plot_instantaneous_connection_latency(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None):
+  def plot_instantaneous_connection_latency(self, latency_percentiles=[0.50, 0.95, 0.99, 0.999], interval=None,
+      dbnames=None, short=False):
     if not interval:
       window = 1000
       min_time = 0
@@ -500,8 +501,8 @@ class QueryLogAnalysis(LogAnalysis):
     else:
       window = 10
       (min_time, max_time) = interval
-    fig = plt.figure(figsize=(24, len(self._dbnames) * 12))
-    for (i, dbname) in enumerate([dbname[:-1].lower() for dbname in self._dbnames]):
+    fig = plt.figure(figsize=(24, len(dbnames or self._dbnames) * (12 if not short else 4)))
+    for (i, dbname) in enumerate([dbname[:-1].lower() for dbname in (dbnames or self._dbnames)]):
       # Data frame
       df = self._query_conn[(self._query_conn["dbname"] == dbname) & (self._query_conn.index >= min_time) &
           (self._query_conn.index <= max_time)].groupby(["window_%s" % window])["latency"].\
@@ -510,14 +511,14 @@ class QueryLogAnalysis(LogAnalysis):
         continue
       df = df.reindex(range(int(df.index.min()), int(df.index.max()) + 1, window), fill_value=0)
       # Plot
-      ax = fig.add_subplot(len(self._dbnames), 1, i + 1)
+      ax = fig.add_subplot(len(dbnames or self._dbnames), 1, i + 1)
       ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
       ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
       ax.grid(alpha=0.75)
       ax.set_xlim((min_time * 1000, max_time * 1000))
       ax.set_ylim((0, df.values.max()))
-      df.plot(ax=ax, kind="line", title="Instantaneous Connection Latency - %s" % dbname, xlabel="Time (millisec)",
-          ylabel="Latency (millisec)", grid=True)
+      df.interpolate(method='linear').plot(ax=ax, kind="line", title="Instantaneous Connection Latency - %s" % dbname,
+          xlabel="Time (millisec)" if not short else "", ylabel="Latency (millisec)", grid=True)
     return fig
 
   @LogAnalysis.save_fig
