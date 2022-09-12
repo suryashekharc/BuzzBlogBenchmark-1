@@ -651,7 +651,7 @@ class RPCLogAnalysis(LogAnalysis):
     return fig
 
   @LogAnalysis.save_fig
-  def plot_instantaneous_latency_of_rpcs_comparison(self, latency_percentile=0.99, interval=None):
+  def plot_instantaneous_latency_of_services_comparison(self, latency_percentile=0.99, interval=None):
     if not interval:
       window = 1000
       min_time = 0
