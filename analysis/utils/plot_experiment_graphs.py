@@ -1020,9 +1020,10 @@ class TCPRetransLogAnalysis(LogAnalysis):
     super().__init__(experiment_dirpath, output_dirpath)
     self._retrans = build_tcp_retrans_df(experiment_dirpath)
     self._retrans["addr_port"] = list(zip(self._retrans.addr, self._retrans.port))
-    self._addr_port = [(addr, port) for addr, port in self._retrans["addr_port"].unique() if port > 1080 and port < 1100]
+    self._addr_port = set([(addr, port) for addr, port in self._retrans["addr_port"].unique() if port > 1080 and port < 1100])
 
-  def plot_number_of_tcp_packet_retransmissions(self, interval=None):
+  def plot_number_of_tcp_packet_retransmissions(self, interval=None,
+      addr_port=None, short=False):
     if not interval:
       window = 1000
       min_time = 0
@@ -1030,23 +1031,24 @@ class TCPRetransLogAnalysis(LogAnalysis):
     else:
       window = 10
       (min_time, max_time) = interval
-    fig = plt.figure(figsize=(24, len(self._addr_port) * 12))
-    for (i, addr_port) in enumerate(self._addr_port):
+    fig = plt.figure(figsize=(24, len(addr_port or self._addr_port) * (12 if not short else 4)))
+    for (i, ap) in enumerate(addr_port or self._addr_port):
       # Data frame
-      df = self._retrans[(self._retrans["addr_port"] == addr_port) & (self._retrans.index >= min_time) &
+      df = self._retrans[(self._retrans["addr_port"] == ap) & (self._retrans.index >= min_time) &
           (self._retrans.index <= max_time)].groupby(["window_%s" % window])["window_%s" % window].count()
       if df.empty:
         continue
       df = df.reindex(range(int(min_time * 1000), int(max_time * 1000) + 1, window), fill_value=0)
       # Plot
-      ax = fig.add_subplot(len(self._addr_port), 1, i + 1)
+      ax = fig.add_subplot(len(addr_port or self._addr_port), 1, i + 1)
       ax.axvline(x=self._ramp_up_duration * 1000, ls="--", color="green")
       ax.axvline(x=(self._total_duration - self._ramp_down_duration) * 1000, ls="--", color="green")
       ax.grid(alpha=0.75)
       ax.set_xlim((df.index.min(), df.index.max()))
       ax.set_ylim((0, df.values.max()))
-      df.plot(ax=ax, kind="line",
-          title="%s:%s - TCP Packet Retransmissions" % (addr_port[0], addr_port[1]), xlabel="Time (millisec)",
+      df.interpolate(method='linear').plot(ax=ax, kind="line",
+          title="%s:%s - TCP Packet Retransmissions" % (ap[0], ap[1]),
+          xlabel="Time (millisec)" if not short else "",
           ylabel="Count (Retransmissions)", color="black", grid=True)
     return fig
 
